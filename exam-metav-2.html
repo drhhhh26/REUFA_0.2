@@ -330,8 +330,8 @@
 
             <div id="questions-container"></div>
 
-            <button class="submit-btn" id="submit-btn" onclick="submitExam()">
-                <span id="submit-text">שלח מבחן</span>
+            <button class="submit-btn" id="submit-btn" onclick="submitExam()" disabled>
+                <span id="submit-text">שלח מבחן (ענה על כל השאלות)</span>
             </button>
         </div>
     </div>
@@ -484,6 +484,18 @@
             const answered = Object.keys(answers).length;
             document.getElementById('progress-num').textContent = `${answered}/25`;
             document.getElementById('progress-bar').style.width = `${(answered / 25) * 100}%`;
+
+            // הפעלה/השבתה של כפתור השליחה
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+
+            if (answered === 25) {
+                submitBtn.disabled = false;
+                submitText.textContent = 'שלח מבחן';
+            } else {
+                submitBtn.disabled = true;
+                submitText.textContent = `שלח מבחן (${25 - answered} שאלות נותרו)`;
+            }
         }
 
         async function submitExam() {
