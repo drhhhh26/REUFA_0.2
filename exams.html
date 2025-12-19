@@ -6,205 +6,39 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>בחנים - מדור רפואה</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Rubik', sans-serif;
-            background: linear-gradient(135deg, #f5f5f0 0%, #e8ede5 100%);
-            min-height: 100vh;
-            direction: rtl;
-            padding: 20px 16px 30px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 480px;
-            margin: 0 auto;
-            opacity: 0;
-            animation: fadeIn 0.8s ease-in-out forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            animation: fadeInDown 0.8s ease-in-out 0.2s backwards;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            margin-left: 15px;
-            transition: all 0.3s ease;
-            font-size: 1.2rem;
-        }
-
-        .back-btn:active {
-            transform: scale(0.95);
-            background: rgba(255, 153, 51, 0.15);
-        }
-
-        .home-btn {
-            background: rgba(30, 136, 229, 0.1);
-            border: 2px solid #1E88E5;
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.3rem;
-            border: none;
-        }
-
-        .home-btn:active {
-            transform: scale(0.95);
-            background: rgba(30, 136, 229, 0.2);
-        }
-
-        .page-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #2d3748;
-        }
-
+        /* סטיילים ייחודיים לעמוד המבחנים */
         .exams-list {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 18px;
         }
 
         .exam-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 24px 20px;
             display: flex;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(243, 244, 246, 0.8);
             animation: fadeInUp 0.6s ease-in-out backwards;
-            user-select: none;
         }
 
-        .exam-card:nth-child(1) { animation-delay: 0.1s; }
-        .exam-card:nth-child(2) { animation-delay: 0.2s; }
-        .exam-card:nth-child(3) { animation-delay: 0.3s; }
-        .exam-card:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .exam-card:active {
-            transform: scale(0.98);
-        }
+        .exam-card:nth-child(1) { animation-delay: 0.3s; }
+        .exam-card:nth-child(2) { animation-delay: 0.4s; }
+        .exam-card:nth-child(3) { animation-delay: 0.5s; }
+        .exam-card:nth-child(4) { animation-delay: 0.6s; }
 
         .exam-icon {
-            width: 55px;
-            height: 55px;
-            min-width: 55px;
-            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 16px;
-            box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
-            font-size: 1.8rem;
+            font-size: 1.9rem;
         }
 
         .exam-info {
             flex: 1;
             min-width: 0;
-        }
-
-        .exam-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 4px;
-        }
-
-        .exam-subtitle {
-            font-size: 0.85rem;
-            color: #718096;
-        }
-
-        .exam-badge {
-            background: rgba(255, 153, 51, 0.15);
-            color: #F57C00;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .exam-badge.coming-soon {
-            background: rgba(160, 160, 160, 0.15);
-            color: #718096;
-        }
-
-        @media (max-width: 360px) {
-            .page-title {
-                font-size: 1.5rem;
-            }
-
-            .exam-title {
-                font-size: 1.05rem;
-            }
-
-            .exam-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 1.6rem;
-            }
+            text-align: right;
         }
     </style>
 </head>
