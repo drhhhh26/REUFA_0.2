@@ -1,6 +1,6 @@
 /*
  * מדור רפואה - מערכת למידה וניהול ידע
- * Shared Styles - Amazing UI/UX
+ * Shared Styles - Professional & Friendly Design
  */
 
 * {
@@ -12,9 +12,9 @@
 
 body {
     font-family: 'Rubik', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #D7C9AA 0%, #FFBE86 50%, #FFD4A3 100%);
     background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
+    animation: gradientShift 20s ease infinite;
     min-height: 100vh;
     direction: rtl;
     padding: 20px 16px;
@@ -30,9 +30,9 @@ body::before {
     right: 0;
     bottom: 0;
     background:
-        radial-gradient(circle at 20% 50%, rgba(255, 153, 51, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(102, 126, 234, 0.15) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(255, 153, 51, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 195, 74, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(215, 201, 170, 0.12) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
 }
@@ -87,17 +87,17 @@ body::before {
 
 /* כרטיסים משותפים */
 .card, .exam-card, .video-item {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
     border-radius: 20px;
     padding: 24px 20px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow:
-        0 8px 32px rgba(31, 38, 135, 0.15),
-        inset 0 1px 1px rgba(255, 255, 255, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.25);
+        0 4px 20px rgba(139, 69, 19, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     position: relative;
     overflow: hidden;
     user-select: none;
@@ -110,19 +110,19 @@ body::before {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 190, 134, 0.15) 0%, transparent 70%);
     opacity: 0;
-    transition: all 0.6s ease;
+    transition: all 0.5s ease;
     transform: scale(0);
 }
 
 .card:hover, .exam-card:hover {
-    transform: translateY(-8px) scale(1.02);
+    transform: translateY(-5px) scale(1.01);
     box-shadow:
-        0 20px 60px rgba(31, 38, 135, 0.3),
-        inset 0 1px 1px rgba(255, 255, 255, 0.4),
-        0 0 0 1px rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.4);
+        0 8px 30px rgba(139, 69, 19, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 0 0 1px rgba(255, 190, 134, 0.3);
+    border-color: rgba(255, 190, 134, 0.5);
 }
 
 .card:hover::before, .exam-card:hover::before {
@@ -131,68 +131,58 @@ body::before {
 }
 
 .card:active, .exam-card:active {
-    transform: translateY(-4px) scale(0.98);
+    transform: translateY(-2px) scale(0.99);
 }
 
 /* אייקונים */
 .card-icon, .exam-icon {
     font-size: 2.8rem;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     z-index: 1;
     width: 60px;
     height: 60px;
     min-width: 60px;
     background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
-    border-radius: 18px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow:
-        0 8px 24px rgba(245, 124, 0, 0.4),
-        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+        0 4px 15px rgba(245, 124, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.4);
     margin-left: 18px;
 }
 
 .card:hover .card-icon, .exam-card:hover .exam-icon {
-    transform: rotate(10deg) scale(1.1);
+    transform: scale(1.08);
     box-shadow:
-        0 12px 32px rgba(245, 124, 0, 0.6),
-        inset 0 2px 4px rgba(255, 255, 255, 0.4);
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: rotate(10deg) scale(1.1);
-    }
-    50% {
-        transform: rotate(10deg) scale(1.15);
-    }
+        0 6px 20px rgba(245, 124, 0, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 /* כפתורים */
 .back-btn, .home-btn {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
     width: 44px;
     height: 44px;
-    border-radius: 14px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(139, 69, 19, 0.1);
     transition: all 0.3s ease;
     font-size: 1.3rem;
-    color: #ffffff;
+    color: #5D4E37;
 }
 
 .back-btn:hover, .home-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.15);
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .back-btn:active, .home-btn:active {
@@ -203,63 +193,60 @@ body::before {
 .card-title, .exam-title {
     font-size: 1.35rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #5D4E37;
     position: relative;
     z-index: 1;
     margin-bottom: 6px;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     letter-spacing: -0.3px;
 }
 
 .card-subtitle, .exam-subtitle {
     font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: #8B7355;
     font-weight: 500;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
 
 .page-title {
     font-size: 2rem;
     font-weight: 800;
-    color: #ffffff;
-    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+    color: #5D4E37;
+    text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
 }
 
 /* Badge */
 .exam-badge {
-    background: rgba(16, 185, 129, 0.25);
+    background: linear-gradient(135deg, #8BC34A 0%, #689F38 100%);
     color: #ffffff;
     padding: 8px 14px;
     border-radius: 10px;
     font-size: 0.75rem;
     font-weight: 700;
     margin-left: 8px;
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 2px 8px rgba(139, 195, 74, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 /* Chevron */
 .chevron-icon {
-    color: rgba(255, 255, 255, 0.9);
+    color: #F57C00;
     font-size: 1.4rem;
     margin-right: 10px;
     transition: all 0.3s ease;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card:hover .chevron-icon, .exam-card:hover .chevron-icon {
     transform: translateX(-5px);
-    color: #ffffff;
+    color: #E65100;
 }
 
 /* Ripple effect */
 .ripple {
     position: absolute;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 190, 134, 0.4);
     transform: scale(0);
-    animation: rippleEffect 0.7s ease-out;
+    animation: rippleEffect 0.6s ease-out;
     pointer-events: none;
 }
 
@@ -268,6 +255,18 @@ body::before {
         transform: scale(4);
         opacity: 0;
     }
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    animation: fadeInDown 0.8s ease-in-out 0.2s backwards;
+}
+
+.header .page-title {
+    flex: 1;
 }
 
 /* Mobile optimizations */
