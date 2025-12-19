@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>מבחן פתיחה מט״ב</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(135deg, #f5f5f0 0%, #e8ede5 100%);
+            min-height: 100vh;
+            direction: rtl;
+            padding: 20px 16px 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 0.95rem;
+        }
+
+        .info-form {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #FF9933;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .start-btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .start-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .question-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question-card.submitted {
+            pointer-events: none;
+        }
+
+        .question-number {
+            color: #FF9933;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .answer-option {
+            background: #f7fafc;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option:active {
+            transform: scale(0.98);
+        }
+
+        .answer-option.selected {
+            background: rgba(255, 153, 51, 0.1);
+            border-color: #FF9933;
+        }
+
+        .answer-option.correct {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
+            border-width: 3px;
+        }
+
+        .answer-option.incorrect {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+            border-width: 3px;
+        }
+
+        .answer-option input {
+            margin-left: 12px;
+        }
+
+        .answer-option label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .submit-btn.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .btn-spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            margin-bottom: 20px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-home-btn {
+            background: rgba(255, 153, 51, 0.15);
+            border: 2px solid #FF9933;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #F57C00;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: none;
+        }
+
+        .back-home-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 153, 51, 0.25);
+        }
+
+        .back-home-btn.show {
+            display: block;
+        }
+
+        .progress-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
+            transition: width 0.3s ease;
+        }
+
+        #exam-form { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="info-screen">
+            <div class="header">
+                <h1>👨‍⚕️ מבחן פתיחה מט״ב</h1>
+                <p>25 שאלות · טראומה וחילוץ</p>
+            </div>
+
+            <div class="info-form">
+                <div class="form-group">
+                    <label>שם מלא</label>
+                    <input type="text" id="student-name" placeholder="הזן שם מלא">
+                </div>
+
+                <div class="form-group">
+                    <label>מספר אישי</label>
+                    <input type="text" id="student-id" placeholder="הזן מספר אישי">
+                </div>
+
+                <div class="form-group">
+                    <label>שם היחידה</label>
+                    <input type="text" id="student-unit" placeholder="הזן שם היחידה">
+                </div>
+
+                <button class="start-btn" id="start-btn" onclick="startExam()">התחל מבחן</button>
+            </div>
+        </div>
+
+        <div id="exam-form">
+            <div class="progress-bar">
+                <button class="back-home-btn" id="back-home-btn" onclick="goHome()">🏠 חזור לתפריט</button>
+                <div class="progress-info">
+                    <div class="progress-text">התקדמות: <span id="progress-num">0/25</span></div>
+                    <div class="progress-fill">
+                        <div class="progress-fill-bar" id="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="questions-container"></div>
+
+            <button class="submit-btn" id="submit-btn" onclick="submitExam()">
+                <span id="submit-text">שלח מבחן</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const QUESTIONS_URL = 'https://script.google.com/macros/s/AKfycbzNophQs_dsKlGRFmB1SrEaKoHtarg5a88kMAEjMzafw0VQDhROASnf9bnVRn6QWpUK6A/exec?sheet=exam_metav_1';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQ-px5HcK3nivAJwrHoRTDinTH7XthjXQQ5RQCiyi2nsL9GMnbZ-US_xljbTF7WmAe/exec';
+
+        let allQuestions = [];
+        let examQuestions = [];
+        let answers = {};
+
+        async function loadQuestions() {
+            try {
+                const response = await fetch(QUESTIONS_URL);
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.error || 'שגיאה בטעינת נתונים');
+                }
+                
+                allQuestions = data.questions.filter(q => q.question && q.question.toString().trim() !== '');
+                console.log('✅ שאלות נטענו בהצלחה:', allQuestions.length);
+                
+                if (allQuestions.length === 0) {
+                    throw new Error('לא נמצאו שאלות בגיליון');
+                }
+            } catch (error) {
+                console.error('❌ שגיאה בטעינת שאלות:', error);
+                throw error;
+            }
+        }
+
+        function selectQuestions() {
+            const traumaQuestions = allQuestions.filter(q => q.id >= 1 && q.id <= 50);
+            const rescueQuestions = allQuestions.filter(q => q.id >= 51 && q.id <= 100);
+
+            const selectedTrauma = shuffleArray(traumaQuestions).slice(0, 13);
+            const selectedRescue = shuffleArray(rescueQuestions).slice(0, 12);
+
+            examQuestions = shuffleArray([...selectedTrauma, ...selectedRescue]);
+        }
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        async function startExam() {
+            const name = document.getElementById('student-name').value.trim();
+            const id = document.getElementById('student-id').value.trim();
+            const unit = document.getElementById('student-unit').value.trim();
+
+            if (!name || !id || !unit) {
+                alert('אנא מלא את כל השדות');
+                return;
+            }
+
+            const startBtn = document.getElementById('start-btn');
+            startBtn.disabled = true;
+            startBtn.textContent = 'טוען שאלות...';
+
+            try {
+                await loadQuestions();
+                
+                if (allQuestions.length === 0) {
+                    throw new Error('לא נמצאו שאלות בגיליון');
+                }
+                
+                selectQuestions();
+                
+                if (examQuestions.length < 25) {
+                    throw new Error(`לא מספיק שאלות: ${examQuestions.length}/25`);
+                }
+                
+                displayQuestions();
+
+                document.getElementById('info-screen').style.display = 'none';
+                document.getElementById('exam-form').style.display = 'block';
+            } catch (error) {
+                console.error('שגיאה:', error);
+                alert('שגיאה בטעינת המבחן: ' + error.message);
+                
+                startBtn.disabled = false;
+                startBtn.textContent = 'התחל מבחן';
+            }
+        }
+
+        function displayQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            examQuestions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.innerHTML = `
+                    <div class="question-number">שאלה ${index + 1} מתוך 25</div>
+                    <div class="question-text">${q.question}</div>
+                    
+                    <div class="answer-option" onclick="selectAnswer(${index}, 1)">
+                        <label>
+                            <input type="radio" name="q${index}" value="1">
+                            ${q.answer1}
+                        </label>
+                    </div>
+                    
+                    <div class="answer-option" onclick="selectAnswer(${index}, 2)">
+                        <label>
+                            <input type="radio" name="q${index}" value="2">
+                            ${q.answer2}
+                        </label>
+                    </div>
+                    
+                    <div class="answer-option" onclick="selectAnswer(${index}, 3)">
+                        <label>
+                            <input type="radio" name="q${index}" value="3">
+                            ${q.answer3}
+                        </label>
+                    </div>
+                    
+                    <div class="answer-option" onclick="selectAnswer(${index}, 4)">
+                        <label>
+                            <input type="radio" name="q${index}" value="4">
+                            ${q.answer4}
+                        </label>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectAnswer(questionIndex, answerNum) {
+            answers[questionIndex] = answerNum;
+            
+            const card = document.querySelectorAll('.question-card')[questionIndex];
+            card.querySelectorAll('.answer-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            card.querySelectorAll('.answer-option')[answerNum - 1].classList.add('selected');
+            card.querySelector(`input[value="${answerNum}"]`).checked = true;
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            document.getElementById('progress-num').textContent = `${answered}/25`;
+            document.getElementById('progress-bar').style.width = `${(answered / 25) * 100}%`;
+        }
+
+        async function submitExam() {
+            // בדיקה שענה על כל השאלות
+            if (Object.keys(answers).length < 25) {
+                // מציאת השאלה הראשונה שלא נענתה
+                for (let i = 0; i < 25; i++) {
+                    if (!answers[i]) {
+                        const cards = document.querySelectorAll('.question-card');
+                        const unansweredCard = cards[i];
+                        
+                        // גלילה לשאלה
+                        unansweredCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        // הדגשה זמנית
+                        unansweredCard.style.border = '3px solid #ef4444';
+                        unansweredCard.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.5)';
+                        
+                        setTimeout(() => {
+                            unansweredCard.style.border = '';
+                            unansweredCard.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.08)';
+                        }, 2000);
+                        
+                        alert(`אנא ענה על שאלה ${i + 1} לפני שליחת המבחן`);
+                        return;
+                    }
+                }
+            }
+
+            const submitBtn = document.getElementById('submit-btn');
+            const submitText = document.getElementById('submit-text');
+            submitBtn.disabled = true;
+            submitText.innerHTML = '<div class="btn-spinner"></div> שולח מבחן...';
+
+            let traumaCorrect = 0;
+            let rescueCorrect = 0;
+
+            examQuestions.forEach((q, index) => {
+                if (answers[index] === q.correct) {
+                    if (q.id >= 1 && q.id <= 50) traumaCorrect++;
+                    else rescueCorrect++;
+                }
+            });
+
+            const traumaScore = Math.round((traumaCorrect / 13) * 100);
+            const rescueScore = Math.round((rescueCorrect / 12) * 100);
+            const totalScore = Math.round(((traumaCorrect + rescueCorrect) / 25) * 100);
+
+            const data = {
+                name: document.getElementById('student-name').value,
+                id: document.getElementById('student-id').value,
+                unit: document.getElementById('student-unit').value,
+                examType: 'מבחן פתיחה מט״ב',
+                scoreTrauma: traumaScore,
+                scoreRescue: rescueScore,
+                totalScore: totalScore
+            };
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data)
+                });
+
+                showResults();
+                document.getElementById('back-home-btn').classList.add('show');
+                submitBtn.classList.add('success');
+                submitText.innerHTML = '✓ המבחן הוגש בהצלחה! - ניתן לראות את התוצאות כעת';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (error) {
+                console.error('שגיאה בשליחה:', error);
+                alert('שגיאה בשליחת המבחן. אנא נסה שנית.');
+                submitBtn.disabled = false;
+                submitText.textContent = 'שלח מבחן';
+            }
+        }
+
+        function showResults() {
+            const cards = document.querySelectorAll('.question-card');
+            
+            examQuestions.forEach((q, index) => {
+                const card = cards[index];
+                card.classList.add('submitted');
+                
+                const options = card.querySelectorAll('.answer-option');
+                const userAnswer = answers[index];
+                const correctAnswer = q.correct;
+
+                if (userAnswer) {
+                    if (userAnswer === correctAnswer) {
+                        options[userAnswer - 1].classList.add('correct');
+                    } else {
+                        options[userAnswer - 1].classList.add('incorrect');
+                        options[correctAnswer - 1].classList.add('correct');
+                    }
+                } else {
+                    options[correctAnswer - 1].classList.add('correct');
+                }
+            });
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
