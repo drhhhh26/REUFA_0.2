@@ -6,13 +6,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <title>מדור רפואה - מערכת למידה וניהול ידע</title>
-    
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         * {
             margin: 0;
@@ -23,18 +23,44 @@
 
         body {
             font-family: 'Rubik', sans-serif;
-            background: linear-gradient(135deg, #f5f5f0 0%, #e8ede5 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             direction: rtl;
             padding: 20px 16px;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(255, 153, 51, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(102, 126, 234, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .container {
             max-width: 480px;
             margin: 0 auto;
             opacity: 0;
-            animation: fadeIn 0.8s ease-in-out forwards;
+            animation: fadeIn 1s ease-in-out forwards;
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes fadeIn {
@@ -45,15 +71,15 @@
 
         .hero {
             text-align: center;
-            margin-bottom: 40px;
-            padding-top: 30px;
-            animation: fadeInDown 0.8s ease-in-out 0.2s backwards;
+            margin-bottom: 50px;
+            padding-top: 40px;
+            animation: fadeInDown 1s ease-in-out 0.3s backwards;
         }
 
         @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(-30px);
             }
             to {
                 opacity: 1;
@@ -61,39 +87,60 @@
             }
         }
 
+        .hero-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
         .hero h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #102a43;
-            margin-bottom: 12px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 14px;
             letter-spacing: -0.5px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            line-height: 1.2;
         }
 
         .hero p {
-            font-size: 1.1rem;
-            font-weight: 400;
-            color: #486581;
-            opacity: 0.9;
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            letter-spacing: 0.3px;
         }
 
         .cards-container {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            padding-bottom: 30px;
+            gap: 20px;
+            padding-bottom: 40px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 24px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            padding: 28px 24px;
             display: flex;
             align-items: center;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(16, 42, 67, 0.06);
-            border: 1px solid rgba(243, 244, 246, 0.8);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow:
+                0 8px 32px rgba(31, 38, 135, 0.15),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             position: relative;
             overflow: hidden;
             animation: fadeInUp 0.8s ease-in-out backwards;
@@ -101,22 +148,53 @@
             user-select: none;
         }
 
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: all 0.6s ease;
+            transform: scale(0);
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow:
+                0 20px 60px rgba(31, 38, 135, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .card:active {
+            transform: translateY(-4px) scale(0.98);
+        }
+
         .card:nth-child(1) {
-            animation-delay: 0.4s;
+            animation-delay: 0.5s;
         }
 
         .card:nth-child(2) {
-            animation-delay: 0.6s;
+            animation-delay: 0.7s;
         }
 
         .card:nth-child(3) {
-            animation-delay: 0.8s;
+            animation-delay: 0.9s;
         }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -124,44 +202,30 @@
             }
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255, 153, 51, 0.08) 0%, rgba(245, 124, 0, 0.08) 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card:active {
-            transform: scale(0.97);
-            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.15);
-        }
-
-        .card:active::before {
-            opacity: 1;
-        }
-
         .card-icon {
             font-size: 2.8rem;
-            color: #10b981;
-            margin-bottom: 14px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             z-index: 1;
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
+            width: 60px;
+            height: 60px;
+            min-width: 60px;
             background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
-            border-radius: 14px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
-            margin-left: 16px;
+            box-shadow:
+                0 8px 24px rgba(245, 124, 0, 0.4),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            margin-left: 18px;
+        }
+
+        .card:hover .card-icon {
+            transform: rotate(10deg) scale(1.1);
+            box-shadow:
+                0 12px 32px rgba(245, 124, 0, 0.6),
+                inset 0 2px 4px rgba(255, 255, 255, 0.4);
         }
 
         .card-info {
@@ -171,32 +235,43 @@
         }
 
         .card-title {
-            font-size: 1.35rem;
-            font-weight: 600;
-            color: #334e68;
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #ffffff;
             position: relative;
             z-index: 1;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            letter-spacing: -0.3px;
         }
 
         .card-subtitle {
-            font-size: 0.9rem;
-            color: #718096;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 500;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
         }
 
         .chevron-icon {
-            color: #FF9933;
-            font-size: 1.3rem;
-            margin-right: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.4rem;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* אפקט ripple */
+        .card:hover .chevron-icon {
+            transform: translateX(-5px);
+            color: #ffffff;
+        }
+
+        /* אפקט ripple משופר */
         .ripple {
             position: absolute;
             border-radius: 50%;
-            background: rgba(16, 185, 129, 0.3);
+            background: rgba(255, 255, 255, 0.5);
             transform: scale(0);
-            animation: rippleEffect 0.6s ease-out;
+            animation: rippleEffect 0.7s ease-out;
             pointer-events: none;
         }
 
@@ -210,7 +285,7 @@
         /* אופטימיזציה למובייל קטן */
         @media (max-width: 360px) {
             .hero h1 {
-                font-size: 1.9rem;
+                font-size: 2.1rem;
             }
 
             .hero p {
@@ -218,38 +293,75 @@
             }
 
             .card {
-                padding: 20px 18px;
+                padding: 24px 20px;
             }
 
             .card-icon {
+                width: 55px;
+                height: 55px;
                 font-size: 2.5rem;
             }
 
             .card-title {
-                font-size: 1.2rem;
+                font-size: 1.3rem;
             }
         }
 
-        /* מסכים גדולים יותר (אבל עדיין מובייל) */
+        /* מסכים גדולים יותר */
         @media (min-width: 400px) {
             .card {
-                padding: 28px 24px;
+                padding: 32px 28px;
             }
 
             .card-icon {
+                width: 65px;
+                height: 65px;
                 font-size: 3rem;
             }
+        }
+
+        /* אנימציית פעימה עדינה */
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .card:hover .card-icon {
+            animation: pulse 2s ease-in-out infinite;
         }
 
         /* למניעת zoom במכשירי iOS */
         input, select, textarea {
             font-size: 16px;
         }
+
+        /* אפקט זוהר עדין */
+        @keyframes glow {
+            0%, 100% {
+                box-shadow:
+                    0 8px 32px rgba(31, 38, 135, 0.15),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            }
+            50% {
+                box-shadow:
+                    0 8px 32px rgba(31, 38, 135, 0.25),
+                    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.8s ease-in-out backwards, glow 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="hero">
+            <div class="hero-icon">🏥</div>
             <h1>מדור רפואה</h1>
             <p>מערכת למידה וניהול ידע</p>
         </div>
@@ -296,7 +408,7 @@
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', function(e) {
                 const page = this.getAttribute('data-page');
-                
+
                 // יצירת אפקט ripple
                 const ripple = document.createElement('div');
                 ripple.className = 'ripple';
@@ -304,16 +416,16 @@
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
+
                 ripple.style.width = ripple.style.height = size + 'px';
                 ripple.style.left = x + 'px';
                 ripple.style.top = y + 'px';
-                
+
                 this.appendChild(ripple);
-                
+
                 // הסרת ripple אחרי האנימציה
-                setTimeout(() => ripple.remove(), 600);
-                
+                setTimeout(() => ripple.remove(), 700);
+
                 // ניווט לדף המתאים
                 setTimeout(() => {
                     if (page === 'tutorials') {
@@ -332,7 +444,7 @@
             });
 
             card.addEventListener('touchend', function() {
-                this.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                this.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
             });
         });
 
