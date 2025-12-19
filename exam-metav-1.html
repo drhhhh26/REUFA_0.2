@@ -555,12 +555,24 @@
             };
 
             try {
-                await fetch(SCRIPT_URL, {
+                const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(data)
                 });
 
-                showResults();
+                // במצב no-cors לא נוכל לקרוא את התגובה, אבל זה בסדר כי הנתונים נשלחו
+                console.log('✅ המבחן נשלח בהצלחה');
+
+                try {
+                    showResults();
+                } catch (resultsError) {
+                    console.error('שגיאה בהצגת תוצאות:', resultsError);
+                }
+
                 document.getElementById('back-home-btn').classList.add('show');
                 submitBtn.classList.add('success');
                 submitText.innerHTML = '✓ המבחן הוגש בהצלחה! - ניתן לראות את התוצאות כעת';
@@ -576,26 +588,45 @@
 
         function showResults() {
             const cards = document.querySelectorAll('.question-card');
-            
-            examQuestions.forEach((q, index) => {
-                const card = cards[index];
-                card.classList.add('submitted');
-                
-                const options = card.querySelectorAll('.answer-option');
-                const userAnswer = answers[index];
-                const correctAnswer = q.correct;
+            console.log(`📊 מציג תוצאות עבור ${examQuestions.length} שאלות`);
 
-                if (userAnswer) {
-                    if (userAnswer === correctAnswer) {
-                        options[userAnswer - 1].classList.add('correct');
+            examQuestions.forEach((q, index) => {
+                try {
+                    const card = cards[index];
+                    if (!card) {
+                        console.error(`❌ לא נמצאה כרטיסייה עבור שאלה ${index + 1}`);
+                        return;
+                    }
+
+                    card.classList.add('submitted');
+
+                    const options = card.querySelectorAll('.answer-option');
+                    if (options.length < 4) {
+                        console.error(`❌ לא נמצאו מספיק אפשרויות עבור שאלה ${index + 1}`);
+                        return;
+                    }
+
+                    const userAnswer = answers[index];
+                    const correctAnswer = q.correct;
+
+                    if (userAnswer) {
+                        if (userAnswer === correctAnswer) {
+                            options[userAnswer - 1].classList.add('correct');
+                        } else {
+                            options[userAnswer - 1].classList.add('incorrect');
+                            options[correctAnswer - 1].classList.add('correct');
+                        }
                     } else {
-                        options[userAnswer - 1].classList.add('incorrect');
                         options[correctAnswer - 1].classList.add('correct');
                     }
-                } else {
-                    options[correctAnswer - 1].classList.add('correct');
+
+                    console.log(`✓ שאלה ${index + 1}: תשובת משתמש=${userAnswer}, תשובה נכונה=${correctAnswer}`);
+                } catch (error) {
+                    console.error(`❌ שגיאה בשאלה ${index + 1}:`, error);
                 }
             });
+
+            console.log('✅ סיום הצגת תוצאות');
         }
 
         function goHome() {
