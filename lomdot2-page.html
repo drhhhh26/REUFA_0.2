@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>לומדות - מדור רפואה</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* סטיילים ייחודיים לעמוד הלומדות */
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .video-item {
+            border-radius: 16px;
+            animation: fadeInUp 0.6s ease-in-out backwards;
+            overflow: visible;
+        }
+
+        .video-header {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .video-header:active {
+            background: rgba(255, 190, 134, 0.1);
+        }
+
+        .video-icon {
+            width: 45px;
+            height: 45px;
+            min-width: 45px;
+            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 14px;
+            box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover .video-icon {
+            transform: scale(1.05);
+        }
+
+        .video-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .video-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #5D4E37;
+            margin-bottom: 3px;
+        }
+
+        .video-subtitle {
+            font-size: 0.85rem;
+            color: #8B7355;
+            font-weight: 500;
+        }
+
+        .chevron-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .video-item.expanded .chevron-icon {
+            transform: rotate(90deg);
+        }
+
+        .video-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(215, 201, 170, 0.2);
+        }
+
+        .video-item.expanded .video-content {
+            max-height: 120px;
+        }
+
+        .video-actions {
+            padding: 16px 18px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 2px 10px rgba(245, 124, 0, 0.4);
+        }
+
+        /* מסך טעינה */
+        .loading-screen {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 153, 51, 0.2);
+            border-top: 4px solid #FF9933;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #5D4E37;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #991b1b;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        @media (max-width: 360px) {
+            .video-title {
+                font-size: 1rem;
+            }
+
+            .video-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <h1 class="page-title">לומדות</h1>
+            <button class="home-btn" onclick="goHome()" style="margin-right: auto;">
+                🏠
+            </button>
+        </div>
+
+        <!-- מסך טעינה -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">טוען סרטונים...</div>
+        </div>
+
+        <!-- הודעת שגיאה -->
+        <div id="error-screen" style="display: none;">
+            <div class="error-message">
+                <div style="font-size: 2rem; margin-bottom: 10px;">⚠️</div>
+                <div id="error-text">שגיאה בטעינת הסרטונים</div>
+            </div>
+        </div>
+
+        <!-- רשימת סרטונים -->
+        <div id="video-list" class="video-list" style="display: none;"></div>
+    </div>
+
+    <script>
+        // כתובת ה-Apps Script שיחזיר את רשימת הסרטונים
+        const VIDEOS_URL = 'https://script.google.com/macros/s/AKfycbzT_F2coz6EOWSFER7dyRs9rq4NNLWDqTq2Xw2mQnpp3mvOS-4EKeNksK1JQrF_A3w/exec';
+
+        let videos = [];
+
+        // טעינת סרטונים מ-Google Sheets
+        async function loadVideos() {
+            try {
+                console.log('🔄 טוען סרטונים מ-Google Sheets...');
+
+                const response = await fetch(VIDEOS_URL);
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'שגיאה בטעינת נתונים');
+                }
+
+                videos = data.videos.filter(v => v.title && v.title.trim() !== '');
+
+                console.log(`✅ ${videos.length} סרטונים נטענו בהצלחה`);
+
+                if (videos.length === 0) {
+                    throw new Error('לא נמצאו סרטונים בגיליון');
+                }
+
+                displayVideos();
+
+            } catch (error) {
+                console.error('❌ שגיאה בטעינת סרטונים:', error);
+                showError(error.message);
+            }
+        }
+
+        // הצגת סרטונים
+        function displayVideos() {
+            const container = document.getElementById('video-list');
+            container.innerHTML = '';
+
+            videos.forEach((video, index) => {
+                const videoItem = document.createElement('div');
+                videoItem.className = 'video-item';
+                videoItem.style.animationDelay = `${0.3 + index * 0.05}s`;
+                videoItem.onclick = function() { toggleVideo(this); };
+
+                videoItem.innerHTML = `
+                    <div class="video-header">
+                        <div class="video-icon">${video.emoji || '🎥'}</div>
+                        <div class="video-info">
+                            <div class="video-title">${video.title}</div>
+                            <div class="video-subtitle">לחץ לצפייה</div>
+                        </div>
+                        <span class="chevron-icon">◀</span>
+                    </div>
+                    <div class="video-content">
+                        <div class="video-actions">
+                            <button class="action-btn" onclick="event.stopPropagation(); openVideo('${video.url}')">
+                                ▶️ צפה בסרטון
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(videoItem);
+            });
+
+            // הסתרת מסך טעינה והצגת רשימה
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('video-list').style.display = 'flex';
+        }
+
+        // הצגת שגיאה
+        function showError(message) {
+            document.getElementById('loading-screen').style.display = 'none';
+            document.getElementById('error-screen').style.display = 'block';
+            document.getElementById('error-text').textContent = message;
+        }
+
+        // פתיחה/סגירה של סרטון
+        function toggleVideo(element) {
+            // סגור את כל האחרים
+            document.querySelectorAll('.video-item').forEach(item => {
+                if (item !== element) {
+                    item.classList.remove('expanded');
+                }
+            });
+
+            // פתח/סגור את הנוכחי
+            element.classList.toggle('expanded');
+        }
+
+        // פתיחת סרטון
+        function openVideo(url) {
+            window.open(url, '_blank');
+        }
+
+        // חזרה
+        function goBack() {
+            window.history.back();
+        }
+
+        // חזרה לבית
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        // מניעת זום כפול
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // טעינה בעת העלאת הדף
+        window.addEventListener('load', loadVideos);
+    </script>
+</body>
+</html>
