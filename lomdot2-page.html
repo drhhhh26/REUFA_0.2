@@ -25,51 +25,49 @@
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        /* סטיילים ייחודיים לעמוד הלומדות - עיצוב מינימליסטי ומודרני */
+        /* סטיילים ייחודיים לעמוד הלומדות */
         .video-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         .video-item {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            animation: fadeInUp 0.4s ease-out backwards;
-            overflow: hidden;
-            transition: all 0.2s ease;
-        }
-
-        .video-item:active {
-            background: #f9fafb;
+            border-radius: 14px;
+            animation: fadeInUp 0.6s ease-in-out backwards;
+            overflow: visible;
         }
 
         .video-header {
             display: flex;
             align-items: center;
-            padding: 12px 14px;
+            padding: 8px 10px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             user-select: none;
-            gap: 12px;
+        }
+
+        .video-header:active {
+            background: rgba(255, 190, 134, 0.1);
         }
 
         .video-icon {
-            width: 34px;
-            height: 34px;
-            min-width: 34px;
-            background: #f3f4f6;
-            border-radius: 6px;
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.2s ease;
+            margin-left: 10px;
+            box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
+            font-size: 1.35rem;
+            transition: all 0.3s ease;
         }
 
-        .video-item:active .video-icon {
-            background: #e5e7eb;
+        .video-item:hover .video-icon {
+            transform: scale(1.05);
         }
 
         .video-info {
@@ -78,23 +76,22 @@
         }
 
         .video-title {
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: 600;
-            color: #111827;
+            color: #5D4E37;
             margin-bottom: 2px;
-            line-height: 1.3;
         }
 
         .video-subtitle {
-            font-size: 0.75rem;
-            color: #6b7280;
-            font-weight: 400;
+            font-size: 0.8rem;
+            color: #8B7355;
+            font-weight: 500;
         }
 
         .chevron-icon {
-            font-size: 1rem;
-            color: #9ca3af;
-            transition: transform 0.2s ease;
+            font-size: 1.2rem;
+            color: #8B7355;
+            transition: transform 0.3s ease;
         }
 
         .video-item.expanded .chevron-icon {
@@ -105,40 +102,41 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
-            background: #f9fafb;
-            border-top: 1px solid #e5e7eb;
+            background: rgba(215, 201, 170, 0.2);
         }
 
         .video-item.expanded .video-content {
-            max-height: 100px;
+            max-height: 120px;
         }
 
         .video-actions {
-            padding: 10px 14px;
+            padding: 12px 14px;
             display: flex;
+            gap: 10px;
         }
 
         .action-btn {
             flex: 1;
-            background: #111827;
+            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
             color: white;
             border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
+            padding: 12px 18px;
+            border-radius: 10px;
             font-family: 'Rubik', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .action-btn:active {
-            background: #374151;
-            transform: scale(0.98);
+            transform: scale(0.97);
+            box-shadow: 0 2px 10px rgba(245, 124, 0, 0.4);
         }
 
         /* מסך טעינה */
@@ -148,13 +146,13 @@
         }
 
         .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f4f6;
-            border-top: 3px solid #111827;
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 153, 51, 0.2);
+            border-top: 4px solid #FF9933;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
+            margin: 0 auto 20px;
         }
 
         @keyframes spin {
@@ -163,36 +161,31 @@
         }
 
         .loading-text {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #6b7280;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #5D4E37;
         }
 
         .error-message {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 8px;
-            padding: 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid #ef4444;
+            border-radius: 12px;
+            padding: 20px;
             margin: 20px 0;
             color: #991b1b;
             text-align: center;
-            font-weight: 500;
-            font-size: 0.875rem;
+            font-weight: 600;
         }
 
         @media (max-width: 360px) {
-            .video-header {
-                padding: 10px 12px;
+            .video-title {
+                font-size: 1rem;
             }
 
             .video-icon {
-                width: 32px;
-                height: 32px;
-                font-size: 1.1rem;
-            }
-
-            .video-title {
-                font-size: 0.9rem;
+                width: 45px;
+                height: 45px;
+                font-size: 1.5rem;
             }
         }
     </style>
