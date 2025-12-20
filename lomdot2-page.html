@@ -5,13 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; frame-src https://drive.google.com;">
+
     <title>לומדות - מדור רפואה</title>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet" crossorigin="anonymous">
 
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
     <!-- Shared Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -217,39 +225,81 @@
         const VIDEOS_URL = 'https://script.google.com/macros/s/AKfycbzT_F2coz6EOWSFER7dyRs9rq4NNLWDqTq2Xw2mQnpp3mvOS-4EKeNksK1JQrF_A3w/exec';
 
         let videos = [];
+        let lastLoadTime = 0;
+        const RATE_LIMIT_MS = 2000; // מינימום 2 שניות בין טעינות
+
+        // בדיקת URL תקין ובטוח
+        function isValidUrl(url) {
+            if (!url || typeof url !== 'string') return false;
+
+            try {
+                const urlObj = new URL(url);
+                // רק HTTPS וממקורות מהימנים
+                return urlObj.protocol === 'https:' &&
+                       (urlObj.hostname === 'drive.google.com' ||
+                        urlObj.hostname === 'script.google.com' ||
+                        urlObj.hostname === 'script.googleusercontent.com');
+            } catch (e) {
+                return false;
+            }
+        }
 
         // טעינת סרטונים מ-Google Sheets
         async function loadVideos() {
-            try {
-                console.log('🔄 טוען סרטונים מ-Google Sheets...');
+            // Rate limiting
+            const now = Date.now();
+            if (now - lastLoadTime < RATE_LIMIT_MS) {
+                console.warn('⏱️ המתן לפני טעינה מחדש');
+                return;
+            }
+            lastLoadTime = now;
 
-                const response = await fetch(VIDEOS_URL);
+            try {
+                const response = await fetch(VIDEOS_URL, {
+                    method: 'GET',
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('שגיאה בתקשורת עם השרת');
+                }
+
                 const data = await response.json();
 
                 if (!data.success) {
-                    throw new Error(data.error || 'שגיאה בטעינת נתונים');
+                    throw new Error('שגיאה בטעינת נתונים');
                 }
 
-                videos = data.videos.filter(v => v.title && v.title.trim() !== '');
-
-                console.log(`✅ ${videos.length} סרטונים נטענו בהצלחה`);
+                // סינון וולידציה של הסרטונים
+                videos = data.videos
+                    .filter(v => v.title && v.title.trim() !== '' && v.url)
+                    .filter(v => isValidUrl(v.url))
+                    .map(v => ({
+                        title: String(v.title).substring(0, 200), // הגבלת אורך
+                        emoji: String(v.emoji || '🎥').substring(0, 10),
+                        url: v.url
+                    }));
 
                 if (videos.length === 0) {
-                    throw new Error('לא נמצאו סרטונים בגיליון');
+                    throw new Error('לא נמצאו סרטונים תקינים');
                 }
 
                 displayVideos();
 
             } catch (error) {
-                console.error('❌ שגיאה בטעינת סרטונים:', error);
-                showError(error.message);
+                console.error('שגיאה בטעינת סרטונים');
+                showError('לא ניתן לטעון את הסרטונים כרגע. אנא נסה שוב מאוחר יותר.');
             }
         }
 
         // escape HTML לאבטחה
         function escapeHtml(text) {
+            if (!text) return '';
             const div = document.createElement('div');
-            div.textContent = text;
+            div.textContent = String(text);
             return div.innerHTML;
         }
 
@@ -327,17 +377,34 @@
 
         // פתיחת סרטון
         function openVideo(url) {
-            window.open(url, '_blank');
+            // ולידציה נוספת לפני פתיחה
+            if (!isValidUrl(url)) {
+                console.error('URL לא תקין');
+                alert('קישור לא תקין');
+                return;
+            }
+
+            // פתיחה עם אבטחה
+            const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+            if (newWindow) {
+                newWindow.opener = null; // מניעת גישה לחלון המקורי
+            }
         }
 
         // חזרה
         function goBack() {
-            window.history.back();
+            // בדיקה שיש היסטוריה
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                goHome();
+            }
         }
 
         // חזרה לבית
         function goHome() {
-            window.location.href = 'index.html';
+            // מניעת open redirect
+            window.location.href = './index.html';
         }
 
         // מניעת זום כפול
