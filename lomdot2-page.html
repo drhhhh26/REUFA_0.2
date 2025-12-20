@@ -21,11 +21,11 @@
         .video-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .video-item {
-            border-radius: 16px;
+            border-radius: 14px;
             animation: fadeInUp 0.6s ease-in-out backwards;
             overflow: visible;
         }
@@ -33,7 +33,7 @@
         .video-header {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
+            padding: 8px 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             user-select: none;
@@ -44,17 +44,17 @@
         }
 
         .video-icon {
-            width: 45px;
-            height: 45px;
-            min-width: 45px;
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
             background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 14px;
+            margin-left: 10px;
             box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             transition: all 0.3s ease;
         }
 
@@ -68,19 +68,21 @@
         }
 
         .video-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #5D4E37;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .video-subtitle {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #8B7355;
             font-weight: 500;
         }
 
         .chevron-icon {
+            font-size: 1.2rem;
+            color: #8B7355;
             transition: transform 0.3s ease;
         }
 
@@ -100,7 +102,7 @@
         }
 
         .video-actions {
-            padding: 16px 18px;
+            padding: 12px 14px;
             display: flex;
             gap: 10px;
         }
@@ -110,10 +112,10 @@
             background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
             color: white;
             border: none;
-            padding: 14px 20px;
-            border-radius: 12px;
+            padding: 12px 18px;
+            border-radius: 10px;
             font-family: 'Rubik', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
@@ -244,6 +246,13 @@
             }
         }
 
+        // escape HTML לאבטחה
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
         // הצגת סרטונים
         function displayVideos() {
             const container = document.getElementById('video-list');
@@ -253,32 +262,47 @@
                 const videoItem = document.createElement('div');
                 videoItem.className = 'video-item';
                 videoItem.style.animationDelay = `${0.3 + index * 0.05}s`;
-                videoItem.onclick = function() { toggleVideo(this); };
 
-                videoItem.innerHTML = `
-                    <div class="video-header">
-                        <div class="video-icon">${video.emoji || '🎥'}</div>
-                        <div class="video-info">
-                            <div class="video-title">${video.title}</div>
-                            <div class="video-subtitle">לחץ לצפייה</div>
-                        </div>
-                        <span class="chevron-icon">◀</span>
+                // יצירת המבנה
+                const videoHeader = document.createElement('div');
+                videoHeader.className = 'video-header';
+                videoHeader.onclick = function() { toggleVideo(videoItem); };
+
+                videoHeader.innerHTML = `
+                    <div class="video-icon">${video.emoji || '🎥'}</div>
+                    <div class="video-info">
+                        <div class="video-title">${escapeHtml(video.title)}</div>
+                        <div class="video-subtitle">לחץ לצפייה</div>
                     </div>
-                    <div class="video-content">
-                        <div class="video-actions">
-                            <button class="action-btn" onclick="event.stopPropagation(); openVideo('${video.url}')">
-                                ▶️ צפה בסרטון
-                            </button>
-                        </div>
-                    </div>
+                    <span class="chevron-icon">◀</span>
                 `;
 
+                const videoContent = document.createElement('div');
+                videoContent.className = 'video-content';
+
+                const videoActions = document.createElement('div');
+                videoActions.className = 'video-actions';
+
+                const actionBtn = document.createElement('button');
+                actionBtn.className = 'action-btn';
+                actionBtn.innerHTML = '▶️ צפה בסרטון';
+                actionBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    openVideo(video.url);
+                };
+
+                videoActions.appendChild(actionBtn);
+                videoContent.appendChild(videoActions);
+                videoItem.appendChild(videoHeader);
+                videoItem.appendChild(videoContent);
                 container.appendChild(videoItem);
             });
 
             // הסתרת מסך טעינה והצגת רשימה
             document.getElementById('loading-screen').style.display = 'none';
             document.getElementById('video-list').style.display = 'flex';
+
+            console.log(`✅ ${videos.length} סרטונים מוצגים בממשק`);
         }
 
         // הצגת שגיאה
