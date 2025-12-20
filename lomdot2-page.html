@@ -11,7 +11,7 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; frame-src https://drive.google.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://*.google.com https://*.googleusercontent.com https://script.google.com https://script.googleusercontent.com; frame-src https://drive.google.com;">
 
     <title>לומדות - מדור רפואה</title>
 
@@ -254,7 +254,11 @@
             }
             lastLoadTime = now;
 
+            console.log('🔄 מתחיל טעינת סרטונים...');
+            console.log('📍 URL:', VIDEOS_URL);
+
             try {
+                console.log('📡 שולח בקשה ל-Google Apps Script...');
                 const response = await fetch(VIDEOS_URL, {
                     method: 'GET',
                     cache: 'no-cache',
@@ -263,25 +267,41 @@
                     }
                 });
 
+                console.log('📊 תגובה התקבלה. Status:', response.status);
+
                 if (!response.ok) {
-                    throw new Error('שגיאה בתקשורת עם השרת');
+                    throw new Error(`שגיאת שרת: ${response.status}`);
                 }
 
                 const data = await response.json();
+                console.log('📦 נתונים:', data);
 
                 if (!data.success) {
-                    throw new Error('שגיאה בטעינת נתונים');
+                    console.error('❌ data.success = false');
+                    throw new Error(data.error || 'שגיאה בטעינת נתונים');
                 }
+
+                console.log(`📋 ${data.videos.length} סרטונים נמצאו`);
 
                 // סינון וולידציה של הסרטונים
                 videos = data.videos
-                    .filter(v => v.title && v.title.trim() !== '' && v.url)
-                    .filter(v => isValidUrl(v.url))
+                    .filter(v => {
+                        const valid = v.title && v.title.trim() !== '' && v.url;
+                        if (!valid) console.warn('⚠️ סרטון לא תקין:', v);
+                        return valid;
+                    })
+                    .filter(v => {
+                        const valid = isValidUrl(v.url);
+                        if (!valid) console.warn('⚠️ URL לא תקין:', v.url);
+                        return valid;
+                    })
                     .map(v => ({
-                        title: String(v.title).substring(0, 200), // הגבלת אורך
+                        title: String(v.title).substring(0, 200),
                         emoji: String(v.emoji || '🎥').substring(0, 10),
                         url: v.url
                     }));
+
+                console.log(`✅ ${videos.length} סרטונים תקינים`);
 
                 if (videos.length === 0) {
                     throw new Error('לא נמצאו סרטונים תקינים');
@@ -290,7 +310,8 @@
                 displayVideos();
 
             } catch (error) {
-                console.error('שגיאה בטעינת סרטונים');
+                console.error('❌ שגיאה בטעינת סרטונים:', error);
+                console.error('📋 פרטי שגיאה:', error.message, error.stack);
                 showError('לא ניתן לטעון את הסרטונים כרגע. אנא נסה שוב מאוחר יותר.');
             }
         }
