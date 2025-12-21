@@ -2,10 +2,10 @@
 
 מדריך זה מסביר כיצד להגדיר את מערכת הספרות המקצועית כך שניתן לעדכן את רשימת המסמכים ישירות מ-Google Sheets.
 
-## שלב 1: יצירת Google Sheet
+## שלב 1: יצירת Google Sheet חדש
 
-1. פתח את ה-Google Sheet שכבר קיים (אותו שיש בו את sheet של הלומדות)
-2. צור sheet חדש בשם **safrot** (חשוב! השם חייב להיות בדיוק safrot)
+1. צור Google Sheet **חדש** (נפרד מזה של הלומדות)
+2. קרא לו "ספרות מקצועית - מדור רפואה" (או כל שם שתרצה)
 3. בשורה הראשונה (כותרות), הזן:
    - עמודה A: `emoji`
    - עמודה B: `title`
@@ -32,63 +32,48 @@
 3. שנה את ההרשאות ל-"כל מי שיש לו את הקישור יכול לצפות"
 4. העתק את הקישור המלא
 
-## שלב 3: עדכון Apps Script
+## שלב 3: יצירת Apps Script
 
-אם כבר יש לך Apps Script מהלומדות, עדכן אותו:
+כיוון שזה Sheet נפרד, נצטרך Apps Script חדש:
+
+1. ב-Google Sheet החדש, לחץ על **Extensions** → **Apps Script**
+2. מחק את הקוד הקיים והדבק את הקוד הזה:
 
 ```javascript
 function doGet(e) {
-  const sheet = e.parameter.sheet || 'videos'; // ברירת מחדל: videos
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const ws = ss.getSheetByName(sheet);
-
-  if (!ws) {
-    return ContentService.createTextOutput(
-      JSON.stringify({
-        success: false,
-        error: 'Sheet not found: ' + sheet
-      })
-    ).setMimeType(ContentService.MimeType.JSON);
-  }
+  const ws = ss.getSheets()[0]; // Sheet הראשון
 
   const data = ws.getDataRange().getValues();
-  const headers = data[0];
-  const rows = data.slice(1);
+  const headers = data[0]; // emoji, title, url
+  const rows = data.slice(1); // כל השורות מלבד הכותרות
 
-  const results = rows
+  const documents = rows
     .filter(row => row[0] && row[1] && row[2]) // רק שורות עם נתונים
-    .map(row => {
-      let obj = {};
-      headers.forEach((header, index) => {
-        obj[header] = row[index];
-      });
-      return obj;
-    });
-
-  // החזרת שם שונה בהתאם ל-sheet
-  const dataKey = sheet === 'safrot' ? 'documents' : 'videos';
+    .map(row => ({
+      emoji: row[0],
+      title: row[1],
+      url: row[2]
+    }));
 
   return ContentService.createTextOutput(
     JSON.stringify({
       success: true,
-      [dataKey]: results
+      documents: documents
     })
   ).setMimeType(ContentService.MimeType.JSON);
 }
 ```
 
-### אם אין לך Apps Script:
-1. ב-Google Sheet, לחץ על **Extensions** → **Apps Script**
-2. מחק את הקוד הקיים והדבק את הקוד למעלה
 3. שמור (Ctrl+S)
 4. לחץ על **Deploy** → **New deployment**
-5. בחר **Web app**
+5. לחץ על ⚙️ ליד "Select type" ובחר **Web app**
 6. הגדרות:
    - Execute as: **Me**
    - Who has access: **Anyone**
 7. לחץ **Deploy**
-8. העתק את ה-URL
-9. עדכן את ה-URL ב-`safrot-page.html` (שורה 205)
+8. **העתק את ה-Web app URL שקיבלת**
+9. פתח את `safrot-page.html` ובשורה 216 החלף `YOUR_APPS_SCRIPT_URL_HERE` ב-URL שהעתקת
 
 ## שלב 4: בדיקה
 
@@ -99,10 +84,9 @@ function doGet(e) {
 ## שלב 5: עדכון נתונים
 
 מעכשיו, כדי להוסיף/לערוך/למחוק מסמכים:
-1. פתח את Google Sheet
-2. עבור ל-sheet **safrot**
-3. ערוך את השורות (הוסף/מחק/שנה)
-4. השינויים יופיעו מיד באתר!
+1. פתח את Google Sheet של הספרות
+2. ערוך את השורות (הוסף/מחק/שנה)
+3. השינויים יופיעו מיד באתר!
 
 ## טיפים
 
@@ -122,13 +106,13 @@ function doGet(e) {
 ## פתרון תקלות
 
 ### המסמכים לא נטענים
-1. בדוק שה-sheet נקרא בדיוק **safrot**
-2. בדוק שיש 3 עמודות: emoji, title, url
-3. בדוק שה-Apps Script מעודכן עם הקוד החדש
+1. בדוק שיש 3 עמודות: emoji, title, url
+2. בדוק שה-Apps Script פרוס (Deployed) והעתקת את ה-URL הנכון
+3. בדוק שעדכנת את ה-URL ב-safrot-page.html
 4. פתח Console (F12) וראה מה השגיאה
 
-### "Sheet not found"
-- ה-sheet חייב להיקרא **safrot** (אותיות קטנות)
+### "YOUR_APPS_SCRIPT_URL_HERE"
+- שכחת להחליף את ה-URL! עדכן בשורה 216 ב-safrot-page.html
 
 ### הקישורים לא נפתחים
 - ודא שקישורי הדרייב מוגדרים ל-"כל מי שיש לו את הקישור יכול לצפות"
