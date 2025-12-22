@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:;">
+
     <title>בחנים - מדור רפואה</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,32 +21,70 @@
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        /* סטיילים ייחודיים לעמוד המבחנים */
-        .exams-list {
+        /* סטיילים ייחודיים לעמוד קטגוריות */
+        .categories-list {
             display: flex;
             flex-direction: column;
             gap: 18px;
         }
 
-        .exam-card {
+        .category-card {
             display: flex;
             align-items: center;
             animation: fadeInUp 0.6s ease-in-out backwards;
         }
 
-        .exam-card:nth-child(1) { animation-delay: 0.3s; }
-        .exam-card:nth-child(2) { animation-delay: 0.4s; }
-        .exam-card:nth-child(3) { animation-delay: 0.5s; }
-        .exam-card:nth-child(4) { animation-delay: 0.6s; }
+        .category-card:nth-child(1) { animation-delay: 0.3s; }
+        .category-card:nth-child(2) { animation-delay: 0.4s; }
+        .category-card:nth-child(3) { animation-delay: 0.5s; }
 
-        .exam-icon {
+        .category-icon {
             font-size: 1.9rem;
         }
 
-        .exam-info {
+        .category-info {
             flex: 1;
             min-width: 0;
             text-align: right;
+        }
+
+        .category-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #5D4E37;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .category-subtitle {
+            font-size: 0.95rem;
+            color: #8B7355;
+            font-weight: 500;
+        }
+
+        .coming-soon-badge {
+            background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+            color: #ffffff;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 8px;
+            box-shadow: 0 2px 8px rgba(107, 114, 128, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        /* כרטיס לא פעיל */
+        .category-card.inactive {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .category-card.inactive:hover {
+            transform: none;
+            box-shadow:
+                0 4px 20px rgba(139, 69, 19, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
     </style>
 </head>
@@ -50,52 +96,45 @@
             <button class="home-btn" onclick="goHome()" style="margin-right: auto;">🏠</button>
         </div>
 
-        <div class="exams-list">
-            <!-- מבחן מקדים חובש -->
-            <div class="exam-card" onclick="openExam('exam-hovesh-1.html')">
-                <div class="exam-icon">🩹</div>
-                <div class="exam-info">
-                    <div class="exam-title">מבחן מקדים חובש</div>
-                    <div class="exam-subtitle">25 שאלות · טראומה וחילוץ</div>
+        <div class="categories-list">
+            <!-- מטפל מחלץ -->
+            <div class="category-card card" onclick="openCategory('metapel')">
+                <div class="category-icon card-icon">🚑</div>
+                <div class="category-info">
+                    <div class="category-title">מטפל מחלץ</div>
+                    <div class="category-subtitle">בחנים לחובש ומטפל בכיר</div>
                 </div>
                 <span class="exam-badge">פעיל</span>
             </div>
 
-            <!-- מבחן סיום חובש -->
-            <div class="exam-card" onclick="openExam('exam-hovesh-2.html')">
-                <div class="exam-icon">✅</div>
-                <div class="exam-info">
-                    <div class="exam-title">מבחן סיום חובש</div>
-                    <div class="exam-subtitle">מבחן גמר מלא</div>
+            <!-- מאגר כללי -->
+            <div class="category-card card inactive">
+                <div class="category-icon card-icon">📚</div>
+                <div class="category-info">
+                    <div class="category-title">מאגר כללי</div>
+                    <div class="category-subtitle">שאלות מכל התחומים</div>
                 </div>
-                <span class="exam-badge">פעיל</span>
+                <span class="coming-soon-badge">בקרוב</span>
             </div>
 
-            <!-- מבחן פתיחה מטב -->
-            <div class="exam-card" onclick="openExam('exam-metav-1.html')">
-                <div class="exam-icon">👨‍⚕️</div>
-                <div class="exam-info">
-                    <div class="exam-title">מבחן פתיחה מט״ב</div>
-                    <div class="exam-subtitle">מבחן מקדים מטפל בכיר</div>
+            <!-- אימון יחידתי -->
+            <div class="category-card card inactive">
+                <div class="category-icon card-icon">🎯</div>
+                <div class="category-info">
+                    <div class="category-title">אימון יחידתי</div>
+                    <div class="category-subtitle">תרגול לפי יחידה</div>
                 </div>
-                <span class="exam-badge">פעיל</span>
-            </div>
-
-            <!-- מבחן סיום מטב -->
-            <div class="exam-card" onclick="openExam('exam-metav-2.html')">
-                <div class="exam-icon">🏆</div>
-                <div class="exam-info">
-                    <div class="exam-title">מבחן סיום מט״ב</div>
-                    <div class="exam-subtitle">מבחן גמר מטפל בכיר</div>
-                </div>
-                <span class="exam-badge">פעיל</span>
+                <span class="coming-soon-badge">בקרוב</span>
             </div>
         </div>
     </div>
 
     <script>
-        function openExam(examFile) {
-            window.location.href = examFile;
+        function openCategory(category) {
+            if (category === 'metapel') {
+                window.location.href = 'exams-metapel.html';
+            }
+            // שאר הקטגוריות יבנו בעתיד
         }
 
         function goBack() {
