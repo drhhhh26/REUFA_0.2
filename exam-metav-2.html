@@ -16,7 +16,7 @@
 
         body {
             font-family: 'Rubik', sans-serif;
-            background: linear-gradient(135deg, #f5f5f0 0%, #e8ede5 100%);
+            background: linear-gradient(135deg, #DCE5E1 0%, #f5f5f0 100%);
             min-height: 100vh;
             direction: rtl;
             padding: 20px 16px 40px;
@@ -78,13 +78,13 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: #FF9933;
+            border-color: #DC9450;
         }
 
         .start-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
+            background: linear-gradient(135deg, #DC9450 0%, #c77d3a 100%);
             color: white;
             border: none;
             border-radius: 12px;
@@ -92,7 +92,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(220, 148, 80, 0.3);
             transition: all 0.3s ease;
         }
 
@@ -104,6 +104,28 @@
             background: #ccc;
             cursor: not-allowed;
             opacity: 0.7;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #DC9450;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .question-card {
@@ -120,7 +142,7 @@
         }
 
         .question-number {
-            color: #FF9933;
+            color: #DC9450;
             font-weight: 700;
             font-size: 0.9rem;
             margin-bottom: 12px;
@@ -130,8 +152,17 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: #2d3748;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             line-height: 1.6;
+        }
+
+        .question-tag {
+            font-size: 0.7rem;
+            color: #a0aec0;
+            font-weight: 500;
+            text-align: right;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
         }
 
         .answer-option {
@@ -149,8 +180,8 @@
         }
 
         .answer-option.selected {
-            background: rgba(255, 153, 51, 0.1);
-            border-color: #FF9933;
+            background: rgba(220, 148, 80, 0.1);
+            border-color: #DC9450;
         }
 
         .answer-option.correct {
@@ -239,14 +270,14 @@
         }
 
         .back-home-btn {
-            background: rgba(255, 153, 51, 0.15);
-            border: 2px solid #FF9933;
+            background: rgba(220, 148, 80, 0.15);
+            border: 2px solid #DC9450;
             padding: 8px 16px;
             border-radius: 10px;
             font-family: 'Rubik', sans-serif;
             font-size: 0.9rem;
             font-weight: 600;
-            color: #F57C00;
+            color: #DC9450;
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
@@ -255,7 +286,7 @@
 
         .back-home-btn:active {
             transform: scale(0.95);
-            background: rgba(255, 153, 51, 0.25);
+            background: rgba(220, 148, 80, 0.25);
         }
 
         .back-home-btn.show {
@@ -282,15 +313,52 @@
 
         .progress-fill-bar {
             height: 100%;
-            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
+            background: linear-gradient(135deg, #DC9450 0%, #c77d3a 100%);
             transition: width 0.3s ease;
         }
 
+        .success-message {
+            background: white;
+            padding: 40px 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .success-message h2 {
+            color: #2d3748;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+        }
+
+        .success-message p {
+            color: #718096;
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        .home-link {
+            display: inline-block;
+            padding: 14px 30px;
+            background: #DC9450;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
         #exam-form { display: none; }
+        #success-screen { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- מסך פרטים אישיים -->
         <div id="info-screen">
             <div class="header">
                 <h1>🏆 מבחן סיום מט״ב</h1>
@@ -317,6 +385,7 @@
             </div>
         </div>
 
+        <!-- מסך המבחן -->
         <div id="exam-form">
             <div class="progress-bar">
                 <button class="back-home-btn" id="back-home-btn" onclick="goHome()">🏠 חזור לתפריט</button>
@@ -334,28 +403,66 @@
                 <span id="submit-text">שלח מבחן (ענה על כל השאלות)</span>
             </button>
         </div>
+
+        <!-- מסך הצלחה -->
+        <div id="success-screen"></div>
+
+        <!-- מסך טעינה -->
+        <div id="loading-screen" class="loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>טוען שאלות...</p>
+        </div>
     </div>
 
     <script>
-        const QUESTIONS_URL = 'https://script.google.com/macros/s/AKfycbzNophQs_dsKlGRFmB1SrEaKoHtarg5a88kMAEjMzafw0VQDhROASnf9bnVRn6QWpUK6A/exec?sheet=exam_metav_1';
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQ-px5HcK3nivAJwrHoRTDinTH7XthjXQQ5RQCiyi2nsL9GMnbZ-US_xljbTF7WmAe/exec';
+        // ⚙️ קונפיגורציה למבחן - מבחן סיום
+        const EXAM_CONFIG = {
+            name: 'מבחן סיום מט״ב',
+            totalQuestions: 25,
+            sheet: 'exam_metav_1',
+            distribution: {
+                trauma: {
+                    Easy: Math.round(25 * 0.40 * 0.20),    // 70% trauma × 20% easy = 4 שאלות
+                    Medium: Math.round(25 * 0.40 * 0.55),  // 70% trauma × 50% medium = 9 שאלות
+                    Hard: Math.round(25 * 0.40 * 0.25)     // 70% trauma × 30% hard = 5 שאלות
+                },
+                rescue: {
+                    Easy: Math.round(25 * 0.60 * 0.10),    // 30% rescue × 50% easy = 4 שאלות
+                    Medium: Math.round(25 * 0.60 * 0.60),  // 30% rescue × 35% medium = 3 שאלות
+                    Hard: Math.round(25 * 0.60 * 0.25)     // 30% rescue × 15% hard = 1 שאלה
+                }
+            }
+        };
+
+        // 🔗 TODO: החלף ב-URL של ה-Apps Script שלך!
+        const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE?sheet=' + EXAM_CONFIG.sheet;
+        const RESULTS_URL = 'https://script.google.com/macros/s/AKfycbzQ-px5HcK3nivAJwrHoRTDinTH7XthjXQQ5RQCiyi2nsL9GMnbZ-US_xljbTF7WmAe/exec';
 
         let allQuestions = [];
         let examQuestions = [];
         let answers = {};
 
+        // טעינת שאלות מ-Google Sheets דרך Apps Script
         async function loadQuestions() {
             try {
-                const response = await fetch(QUESTIONS_URL);
+                console.log('📡 טוען שאלות מ-' + EXAM_CONFIG.sheet);
+                const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
-                
+
                 if (!data.success) {
                     throw new Error(data.error || 'שגיאה בטעינת נתונים');
                 }
-                
-                allQuestions = data.questions.filter(q => q.question && q.question.toString().trim() !== '');
-                console.log('✅ שאלות נטענו בהצלחה:', allQuestions.length);
-                
+
+                allQuestions = data.questions.filter(q =>
+                    q.question &&
+                    q.question.toString().trim() !== '' &&
+                    q.topic &&
+                    q.difficulty
+                );
+
+                console.log('🏆 נטענו ' + allQuestions.length + ' שאלות מהגיליון');
+                console.log('📝 דוגמה לשאלה:', allQuestions[0]);
+
                 if (allQuestions.length === 0) {
                     throw new Error('לא נמצאו שאלות בגיליון');
                 }
@@ -365,14 +472,47 @@
             }
         }
 
+        // הגרלת שאלות לפי נושא (topic) ורמת קושי (difficulty)
         function selectQuestions() {
-            const traumaQuestions = allQuestions.filter(q => q.id >= 1 && q.id <= 50);
-            const rescueQuestions = allQuestions.filter(q => q.id >= 51 && q.id <= 100);
+            const selected = [];
+            const dist = EXAM_CONFIG.distribution;
 
-            const selectedTrauma = shuffleArray(traumaQuestions).slice(0, 13);
-            const selectedRescue = shuffleArray(rescueQuestions).slice(0, 12);
+            // בחירת שאלות טראומה
+            for (const [difficulty, count] of Object.entries(dist.trauma)) {
+                const pool = allQuestions.filter(q =>
+                    q.topic === 'trauma' && q.difficulty === difficulty
+                );
 
-            examQuestions = shuffleArray([...selectedTrauma, ...selectedRescue]);
+                if (pool.length < count) {
+                    console.warn(`⚠️ לא מספיק שאלות: trauma-${difficulty} (צריך ${count}, יש ${pool.length})`);
+                }
+
+                const picked = shuffleArray(pool).slice(0, count);
+                selected.push(...picked);
+                console.log(`🏆 נבחרו ${picked.length} שאלות: trauma-${difficulty}`);
+            }
+
+            // בחירת שאלות חילוץ
+            for (const [difficulty, count] of Object.entries(dist.rescue)) {
+                const pool = allQuestions.filter(q =>
+                    q.topic === 'rescue' && q.difficulty === difficulty
+                );
+
+                if (pool.length < count) {
+                    console.warn(`⚠️ לא מספיק שאלות: rescue-${difficulty} (צריך ${count}, יש ${pool.length})`);
+                }
+
+                const picked = shuffleArray(pool).slice(0, count);
+                selected.push(...picked);
+                console.log(`🏆 נבחרו ${picked.length} שאלות: rescue-${difficulty}`);
+            }
+
+            examQuestions = shuffleArray(selected);
+
+            const traumaCount = examQuestions.filter(q => q.topic === 'trauma').length;
+            const rescueCount = examQuestions.filter(q => q.topic === 'rescue').length;
+
+            console.log(`📊 סה"כ ${examQuestions.length} שאלות | טראומה: ${traumaCount} | חילוץ: ${rescueCount}`);
         }
 
         function shuffleArray(array) {
@@ -384,6 +524,7 @@
             return arr;
         }
 
+        // התחלת מבחן
         async function startExam() {
             const name = document.getElementById('student-name').value.trim();
             const id = document.getElementById('student-id').value.trim();
@@ -394,6 +535,7 @@
                 return;
             }
 
+            // השבתת כפתור ההתחלה
             const startBtn = document.getElementById('start-btn');
             startBtn.disabled = true;
             startBtn.textContent = 'טוען שאלות...';
@@ -413,17 +555,20 @@
                 
                 displayQuestions();
 
+                // מעבר למסך המבחן
                 document.getElementById('info-screen').style.display = 'none';
                 document.getElementById('exam-form').style.display = 'block';
             } catch (error) {
                 console.error('שגיאה:', error);
                 alert('שגיאה בטעינת המבחן: ' + error.message);
                 
+                // החזרת הכפתור למצב תקין
                 startBtn.disabled = false;
                 startBtn.textContent = 'התחל מבחן';
             }
         }
 
+        // הצגת שאלות
         function displayQuestions() {
             const container = document.getElementById('questions-container');
             container.innerHTML = '';
@@ -431,31 +576,36 @@
             examQuestions.forEach((q, index) => {
                 const card = document.createElement('div');
                 card.className = 'question-card';
+
+                // המרת difficulty לאות (Easy → E, Medium → M, Hard → H)
+                const difficultyTag = q.difficulty ? q.difficulty.charAt(0).toUpperCase() : '';
+
                 card.innerHTML = `
                     <div class="question-number">שאלה ${index + 1} מתוך 25</div>
                     <div class="question-text">${q.question}</div>
-                    
+                    <div class="question-tag">${difficultyTag}</div>
+
                     <div class="answer-option" onclick="selectAnswer(${index}, 1)">
                         <label>
                             <input type="radio" name="q${index}" value="1">
                             ${q.answer1}
                         </label>
                     </div>
-                    
+
                     <div class="answer-option" onclick="selectAnswer(${index}, 2)">
                         <label>
                             <input type="radio" name="q${index}" value="2">
                             ${q.answer2}
                         </label>
                     </div>
-                    
+
                     <div class="answer-option" onclick="selectAnswer(${index}, 3)">
                         <label>
                             <input type="radio" name="q${index}" value="3">
                             ${q.answer3}
                         </label>
                     </div>
-                    
+
                     <div class="answer-option" onclick="selectAnswer(${index}, 4)">
                         <label>
                             <input type="radio" name="q${index}" value="4">
@@ -467,6 +617,7 @@
             });
         }
 
+        // בחירת תשובה
         function selectAnswer(questionIndex, answerNum) {
             answers[questionIndex] = answerNum;
             
@@ -480,6 +631,7 @@
             updateProgress();
         }
 
+        // עדכון פרוגרס
         function updateProgress() {
             const answered = Object.keys(answers).length;
             document.getElementById('progress-num').textContent = `${answered}/25`;
@@ -498,6 +650,7 @@
             }
         }
 
+        // שליחת מבחן
         async function submitExam() {
             // בדיקה שענה על כל השאלות
             if (Object.keys(answers).length < 25) {
@@ -525,25 +678,35 @@
                 }
             }
 
+            // השבתת כפתור השליחה והוספת אנימציית טעינה
             const submitBtn = document.getElementById('submit-btn');
             const submitText = document.getElementById('submit-text');
             submitBtn.disabled = true;
             submitText.innerHTML = '<div class="btn-spinner"></div> שולח מבחן...';
 
+            // חישוב ציון לפי topic
             let traumaCorrect = 0;
             let rescueCorrect = 0;
+            let traumaTotal = 0;
+            let rescueTotal = 0;
 
             examQuestions.forEach((q, index) => {
-                if (answers[index] === q.correct) {
-                    if (q.id >= 1 && q.id <= 50) traumaCorrect++;
-                    else rescueCorrect++;
+                if (q.topic === 'trauma') {
+                    traumaTotal++;
+                    if (answers[index] === q.correct) traumaCorrect++;
+                } else if (q.topic === 'rescue') {
+                    rescueTotal++;
+                    if (answers[index] === q.correct) rescueCorrect++;
                 }
             });
 
-            const traumaScore = Math.round((traumaCorrect / 13) * 100);
-            const rescueScore = Math.round((rescueCorrect / 12) * 100);
+            const traumaScore = traumaTotal > 0 ? Math.round((traumaCorrect / traumaTotal) * 100) : 0;
+            const rescueScore = rescueTotal > 0 ? Math.round((rescueCorrect / rescueTotal) * 100) : 0;
             const totalScore = Math.round(((traumaCorrect + rescueCorrect) / 25) * 100);
 
+            console.log(`📊 טראומה: ${traumaCorrect}/${traumaTotal} (${traumaScore}%) | חילוץ: ${rescueCorrect}/${rescueTotal} (${rescueScore}%)`);
+
+            // שליחה ל-Google Sheets
             const data = {
                 name: document.getElementById('student-name').value,
                 id: document.getElementById('student-id').value,
@@ -555,7 +718,7 @@
             };
 
             try {
-                const response = await fetch(SCRIPT_URL, {
+                const response = await fetch(RESULTS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
@@ -565,27 +728,36 @@
                 });
 
                 // במצב no-cors לא נוכל לקרוא את התגובה, אבל זה בסדר כי הנתונים נשלחו
-                console.log('✅ המבחן נשלח בהצלחה');
+                console.log('🏆 המבחן נשלח בהצלחה ל-Google Sheets');
 
+                // הצגת תשובות נכונות ושגויות
                 try {
                     showResults();
                 } catch (resultsError) {
                     console.error('שגיאה בהצגת תוצאות:', resultsError);
                 }
 
+                // הצגת כפתור חזור לתפריט
                 document.getElementById('back-home-btn').classList.add('show');
+
+                // שינוי הכפתור להצלחה
                 submitBtn.classList.add('success');
                 submitText.innerHTML = '✓ המבחן הוגש בהצלחה! - ניתן לראות את התוצאות כעת';
+
+                // גלילה לראש הדף
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
             } catch (error) {
                 console.error('שגיאה בשליחה:', error);
                 alert('שגיאה בשליחת המבחן. אנא נסה שנית.');
+
+                // החזרת הכפתור למצב תקין
                 submitBtn.disabled = false;
                 submitText.textContent = 'שלח מבחן';
             }
         }
 
+        // הצגת תוצאות
         function showResults() {
             const cards = document.querySelectorAll('.question-card');
             console.log(`📊 מציג תוצאות עבור ${examQuestions.length} שאלות`);
@@ -609,14 +781,17 @@
                     const userAnswer = answers[index];
                     const correctAnswer = q.correct;
 
+                    // סימון התשובה של המשתמש
                     if (userAnswer) {
                         if (userAnswer === correctAnswer) {
                             options[userAnswer - 1].classList.add('correct');
                         } else {
                             options[userAnswer - 1].classList.add('incorrect');
+                            // סימון התשובה הנכונה גם
                             options[correctAnswer - 1].classList.add('correct');
                         }
                     } else {
+                        // אם לא ענה - רק סימון התשובה הנכונה
                         options[correctAnswer - 1].classList.add('correct');
                     }
 
@@ -626,7 +801,7 @@
                 }
             });
 
-            console.log('✅ סיום הצגת תוצאות');
+            console.log('🏆 סיום הצגת תוצאות');
         }
 
         function goHome() {
