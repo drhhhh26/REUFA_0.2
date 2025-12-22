@@ -261,12 +261,17 @@ body::before {
 .header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     margin-bottom: 25px;
     animation: fadeInDown 0.8s ease-in-out 0.2s backwards;
+    position: relative;
 }
 
 .header .page-title {
-    flex: 1;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
 }
 
 /* Mobile optimizations */
