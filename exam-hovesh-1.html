@@ -422,14 +422,14 @@
             sheet: 'exam_hovesh_1',
             distribution: {
                 trauma: {
-                    Easy: Math.round(25 * 0.70 * 0.20),    // 70% trauma × 20% easy = 4 שאלות
-                    Medium: Math.round(25 * 0.70 * 0.50),  // 70% trauma × 50% medium = 9 שאלות
-                    Hard: Math.round(25 * 0.70 * 0.30)     // 70% trauma × 30% hard = 5 שאלות
+                    Easy: 4,     // 70% trauma × 20% easy = 4 שאלות
+                    Medium: 8,   // 70% trauma × 50% medium = 8 שאלות (תוקן מ-9)
+                    Hard: 5      // 70% trauma × 30% hard = 5 שאלות
                 },
                 rescue: {
-                    Easy: Math.round(25 * 0.30 * 0.50),    // 30% rescue × 50% easy = 4 שאלות
-                    Medium: Math.round(25 * 0.30 * 0.35),  // 30% rescue × 35% medium = 3 שאלות
-                    Hard: Math.round(25 * 0.30 * 0.15)     // 30% rescue × 15% hard = 1 שאלה
+                    Easy: 4,     // 30% rescue × 50% easy = 4 שאלות
+                    Medium: 3,   // 30% rescue × 35% medium = 3 שאלות
+                    Hard: 1      // 30% rescue × 15% hard = 1 שאלה
                 }
             }
         };
