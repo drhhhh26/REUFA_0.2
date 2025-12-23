@@ -45,11 +45,18 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
-        .hero-icon {
-            font-size: 3.5rem;
+        .hero-logos {
             margin-bottom: 20px;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
             animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-logos img {
+            height: 70px;
+            width: auto;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
         }
 
@@ -119,7 +126,10 @@
 <body>
     <div class="container">
         <div class="hero">
-            <div class="hero-icon">🩺</div>
+            <div class="hero-logos">
+                <img src="Assets/logo1.png" alt="Logo 1">
+                <img src="Assets/logo2.png" alt="Logo 2">
+            </div>
             <h1>מדור רפואה</h1>
         </div>
 
