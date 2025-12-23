@@ -579,11 +579,13 @@
 
                 // המרת difficulty לאות (Easy → E, Medium → M, Hard → H)
                 const difficultyTag = q.difficulty ? q.difficulty.charAt(0).toUpperCase() : '';
+                // המרת topic לאות (trauma → T, rescue → R)
+                const topicTag = q.topic === 'trauma' ? 'T' : 'R';
 
                 card.innerHTML = `
                     <div class="question-number">שאלה ${index + 1} מתוך 25</div>
                     <div class="question-text">${q.question}</div>
-                    <div class="question-tag">${difficultyTag}</div>
+                    <div class="question-tag">${topicTag} | ${difficultyTag}</div>
 
                     <div class="answer-option" onclick="selectAnswer(${index}, 1)">
                         <label>
