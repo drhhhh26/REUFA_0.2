@@ -422,14 +422,14 @@
             sheet: 'exam_metav_1',
             distribution: {
                 trauma: {
-                    Easy: Math.round(25 * 0.40 * 0.20),    // 70% trauma × 20% easy = 4 שאלות
-                    Medium: Math.round(25 * 0.40 * 0.55),  // 70% trauma × 50% medium = 9 שאלות
-                    Hard: Math.round(25 * 0.40 * 0.25)     // 70% trauma × 30% hard = 5 שאלות
+                    Easy: 2,     // 40% trauma × 20% easy = 2 שאלות
+                    Medium: 5,   // 40% trauma × 55% medium = 5 שאלות (תוקן מ-6)
+                    Hard: 3      // 40% trauma × 25% hard = 3 שאלות
                 },
                 rescue: {
-                    Easy: Math.round(25 * 0.60 * 0.10),    // 30% rescue × 50% easy = 4 שאלות
-                    Medium: Math.round(25 * 0.60 * 0.60),  // 30% rescue × 35% medium = 3 שאלות
-                    Hard: Math.round(25 * 0.60 * 0.25)     // 30% rescue × 15% hard = 1 שאלה
+                    Easy: 2,     // 60% rescue × 10% easy = 2 שאלות
+                    Medium: 9,   // 60% rescue × 60% medium = 9 שאלות
+                    Hard: 4      // 60% rescue × 25% hard = 4 שאלות
                 }
             }
         };
