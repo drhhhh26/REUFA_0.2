@@ -190,7 +190,10 @@ const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE?sheet=exam_metav_1';
    ✅ נטענו 25 שאלות מתוך 50 שאלות זמינות
    📊 התפלגות: Trauma: 17 | Rescue: 8
    ```
-4. כל שאלה תציג tag **E** | **M** | **H** בצד ימין
+4. כל שאלה תציג **2 tags** בצד ימין:
+   - **T** או **R** (Trauma / Rescue)
+   - **E**, **M**, או **H** (Easy / Medium / Hard)
+   - לדוגמה: `T | M` = שאלת טראומה בינונית
 
 ---
 
@@ -206,7 +209,9 @@ const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE?sheet=exam_metav_1';
 - זה תקין! המערכת מערבבת את השאלות אוטומטית בכל טעינה
 
 ### Tag לא מוצג
-- בדוק ב-Console שהשאלות מכילות `difficulty: "Easy"/"Medium"/"Hard"`
+- בדוק ב-Console שהשאלות מכילות:
+  - `topic: "trauma"` או `"rescue"`
+  - `difficulty: "Easy"/"Medium"/"Hard"`
 
 ---
 
