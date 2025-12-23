@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; frame-src https://drive.google.com;">
+
+    <title>מדור רפואה - מערכת למידה וניהול ידע</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet" crossorigin="anonymous">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* סטיילים ייחודיים לעמוד הבית */
+        .hero {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-top: 40px;
+            animation: fadeInDown 1s ease-in-out 0.3s backwards;
+        }
+
+        .hero-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #000000;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.3px;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-bottom: 40px;
+        }
+
+        .card {
+            display: flex;
+            align-items: center;
+            animation: fadeInUp 0.8s ease-in-out backwards;
+        }
+
+        .card:nth-child(1) {
+            animation-delay: 0.5s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.7s;
+        }
+
+        .card:nth-child(3) {
+            animation-delay: 0.9s;
+        }
+
+        .card-info {
+            flex: 1;
+            text-align: right;
+            min-width: 0;
+        }
+
+        @media (max-width: 360px) {
+            .hero h1 {
+                font-size: 2.1rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <div class="hero-icon">🩺</div>
+            <h1>מדור רפואה</h1>
+        </div>
+
+        <div class="cards-container">
+            <div class="card" data-page="tutorials">
+                <div class="card-icon">🎓</div>
+                <div class="card-info">
+                    <div class="card-title">לומדות</div>
+                    <div class="card-subtitle">לחץ לצפייה</div>
+                </div>
+                <span class="chevron-icon">◀</span>
+            </div>
+
+            <div class="card" data-page="quizzes">
+                <div class="card-icon">📝</div>
+                <div class="card-info">
+                    <div class="card-title">בחנים</div>
+                    <div class="card-subtitle">לחץ לצפייה</div>
+                </div>
+                <span class="chevron-icon">◀</span>
+            </div>
+
+            <div class="card" data-page="literature">
+                <div class="card-icon">📖</div>
+                <div class="card-info">
+                    <div class="card-title">ספרות מקצועית</div>
+                    <div class="card-subtitle">לחץ לצפייה</div>
+                </div>
+                <span class="chevron-icon">◀</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // מניעת התנהגות ברירת מחדל במובייל
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.card')) {
+                return;
+            }
+        }, { passive: true });
+
+        // טיפול בלחיצות על כרטיסים
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                const page = this.getAttribute('data-page');
+
+                // יצירת אפקט ripple
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+
+                this.appendChild(ripple);
+
+                // הסרת ripple אחרי האנימציה
+                setTimeout(() => ripple.remove(), 700);
+
+                // ניווט לדף המתאים
+                setTimeout(() => {
+                    if (page === 'tutorials') {
+                        window.location.href = 'lomdot2-page.html';
+                    } else if (page === 'quizzes') {
+                        window.location.href = 'exams.html';
+                    } else if (page === 'literature') {
+                        window.location.href = 'safrot-page.html';
+                    }
+                }, 300);
+            });
+
+            // תמיכה במגע
+            card.addEventListener('touchstart', function() {
+                this.style.transition = 'all 0.1s ease';
+            });
+
+            card.addEventListener('touchend', function() {
+                this.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            });
+        });
+
+        // מניעת זום כפול בלחיצה
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>

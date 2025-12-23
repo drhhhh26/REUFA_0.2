@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:;">
+
+    <title>בחנים מטפל מחלץ - מדור רפואה</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* סטיילים ייחודיים לעמוד המבחנים */
+        .exams-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .exam-card {
+            display: flex;
+            align-items: center;
+            animation: fadeInUp 0.6s ease-in-out backwards;
+        }
+
+        .exam-card:nth-child(1) { animation-delay: 0.3s; }
+        .exam-card:nth-child(2) { animation-delay: 0.4s; }
+        .exam-card:nth-child(3) { animation-delay: 0.5s; }
+        .exam-card:nth-child(4) { animation-delay: 0.6s; }
+
+        .exam-icon {
+            font-size: 1.9rem;
+        }
+
+        .exam-info {
+            flex: 1;
+            min-width: 0;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <h1 class="page-title">מטפל מחלץ</h1>
+            <button class="home-btn" onclick="goHome()">🏠</button>
+        </div>
+
+        <div class="exams-list">
+            <!-- מבחן מקדים חובש -->
+            <div class="exam-card" onclick="openExam('exam-hovesh-1.html')">
+                <div class="exam-icon">🩹</div>
+                <div class="exam-info">
+                    <div class="exam-title">מבחן מקדים חובש</div>
+                    <div class="exam-subtitle">25 שאלות · טראומה וחילוץ</div>
+                </div>
+                <span class="exam-badge">פעיל</span>
+            </div>
+
+            <!-- מבחן סיום חובש -->
+            <div class="exam-card" onclick="openExam('exam-hovesh-2.html')">
+                <div class="exam-icon">✅</div>
+                <div class="exam-info">
+                    <div class="exam-title">מבחן סיום חובש</div>
+                    <div class="exam-subtitle">מבחן גמר מלא</div>
+                </div>
+                <span class="exam-badge">פעיל</span>
+            </div>
+
+            <!-- מבחן פתיחה מטב -->
+            <div class="exam-card" onclick="openExam('exam-metav-1.html')">
+                <div class="exam-icon">👨‍⚕️</div>
+                <div class="exam-info">
+                    <div class="exam-title">מבחן פתיחה מט״ב</div>
+                    <div class="exam-subtitle">מבחן מקדים מטפל בכיר</div>
+                </div>
+                <span class="exam-badge">פעיל</span>
+            </div>
+
+            <!-- מבחן סיום מטב -->
+            <div class="exam-card" onclick="openExam('exam-metav-2.html')">
+                <div class="exam-icon">🏆</div>
+                <div class="exam-info">
+                    <div class="exam-title">מבחן סיום מט״ב</div>
+                    <div class="exam-subtitle">מבחן גמר מטפל בכיר</div>
+                </div>
+                <span class="exam-badge">פעיל</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openExam(examFile) {
+            window.location.href = examFile;
+        }
+
+        function goBack() {
+            window.location.href = 'exams.html';
+        }
+
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        // מניעת זום כפול
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
