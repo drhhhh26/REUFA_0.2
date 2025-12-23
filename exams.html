@@ -25,6 +25,14 @@
 
     <style>
         /* סטיילים ייחודיים לעמוד קטגוריות */
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('Assets/background.JPEG');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
         .categories-list {
             display: flex;
             flex-direction: column;
@@ -35,6 +43,9 @@
             display: flex;
             align-items: center;
             animation: fadeInUp 0.6s ease-in-out backwards;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
         }
 
         .category-card:nth-child(1) { animation-delay: 0.3s; }

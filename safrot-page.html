@@ -26,6 +26,14 @@
 
     <style>
         /* סטיילים ייחודיים לעמוד ספרות מקצועית - רשת כרטיסים */
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('Assets/background.JPEG');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
         .documents-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -34,14 +42,14 @@
         }
 
         .document-card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 20px 16px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
             display: flex;

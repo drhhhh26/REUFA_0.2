@@ -26,6 +26,14 @@
 
     <style>
         /* סטיילים ייחודיים לעמוד הלומדות */
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('Assets/background.JPEG');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
         .video-list {
             display: flex;
             flex-direction: column;
@@ -36,6 +44,9 @@
             border-radius: 14px;
             animation: fadeInUp 0.6s ease-in-out backwards;
             overflow: visible;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
         }
 
         .video-header {
