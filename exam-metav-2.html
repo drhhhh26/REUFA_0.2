@@ -3,56 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>מבחן סיום מט״ב</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://script.google.com https://script.googleusercontent.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://script.google.com https://script.googleusercontent.com;">
+
+    <title>מבחן סיום מט״ב - מדור רפואה</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
     <style>
-        * {
+        /* ========================================
+           CSS Variables - Tactical Clean Theme
+           ======================================== */
+        :root {
+            --color-primary: #F7941D;
+            --color-primary-hover: #E8850A;
+            --color-primary-light: rgba(247, 148, 29, 0.1);
+            --color-primary-glow: rgba(247, 148, 29, 0.25);
+
+            --color-dark: #1A202C;
+            --color-dark-secondary: #2D3748;
+            --color-dark-tertiary: #4A5568;
+
+            --color-surface: #FFFFFF;
+            --color-background: #F3F4F6;
+            --color-background-alt: #E5E7EB;
+
+            --color-text-primary: #1A202C;
+            --color-text-secondary: #4A5568;
+            --color-text-tertiary: #718096;
+            --color-text-inverse: #FFFFFF;
+
+            --color-success: #10B981;
+            --color-success-light: rgba(16, 185, 129, 0.15);
+            --color-error: #EF4444;
+            --color-error-light: rgba(239, 68, 68, 0.15);
+
+            --font-family: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            --shadow-primary: 0 4px 14px rgba(247, 148, 29, 0.25);
+
+            --transition-fast: 150ms ease;
+            --transition-base: 250ms ease;
+        }
+
+        /* ========================================
+           Base Styles
+           ======================================== */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Rubik', sans-serif;
-            background: linear-gradient(135deg, #DCE5E1 0%, #f5f5f0 100%);
+            font-family: var(--font-family);
+            background: var(--color-background);
             min-height: 100vh;
             direction: rtl;
-            padding: 20px 16px 40px;
+            padding: 16px;
+            color: var(--color-text-primary);
+            line-height: 1.6;
+        }
+
+        /* Subtle grid pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                linear-gradient(rgba(247, 148, 29, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(247, 148, 29, 0.015) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
-        .header {
+        /* ========================================
+           Info Screen - Student Details
+           ======================================== */
+        .info-header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 32px 24px;
+            background: var(--color-surface);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.5s ease;
         }
 
-        .header h1 {
-            font-size: 1.8rem;
-            color: #2d3748;
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tactical corner accents */
+        .info-header::before,
+        .info-header::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--color-primary);
+            opacity: 0.2;
+        }
+
+        .info-header::before {
+            top: 12px;
+            right: 12px;
+            border-left: none;
+            border-bottom: none;
+            border-radius: 0 var(--radius-sm) 0 0;
+        }
+
+        .info-header::after {
+            bottom: 12px;
+            left: 12px;
+            border-right: none;
+            border-top: none;
+            border-radius: 0 0 0 var(--radius-sm);
+        }
+
+        .info-header-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: var(--shadow-primary);
+            color: white;
+        }
+
+        .info-header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-dark);
             margin-bottom: 8px;
         }
 
-        .header p {
-            color: #718096;
+        .info-header p {
+            color: var(--color-text-tertiary);
             font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
+        .info-header p .dot {
+            width: 5px;
+            height: 5px;
+            background: var(--color-primary);
+            border-radius: 50%;
+        }
+
+        /* Form Styles */
         .info-form {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
+            background: var(--color-surface);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            animation: slideUp 0.5s ease 0.1s backwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .form-group {
@@ -60,187 +211,414 @@
         }
 
         .form-group label {
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-weight: 600;
-            color: #2d3748;
+            color: var(--color-dark);
             margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-group label i {
+            color: var(--color-primary);
+            font-size: 0.9rem;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            font-family: 'Rubik', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            padding: 14px 16px;
+            border: 2px solid var(--color-background-alt);
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
+            font-size: 16px;
+            transition: all var(--transition-base);
+            background: var(--color-background);
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #DC9450;
+            border-color: var(--color-primary);
+            background: var(--color-surface);
+            box-shadow: 0 0 0 3px var(--color-primary-light);
+        }
+
+        .form-group input::placeholder {
+            color: var(--color-text-tertiary);
         }
 
         .start-btn {
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #DC9450 0%, #c77d3a 100%);
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-family: 'Rubik', sans-serif;
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
             font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(220, 148, 80, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .start-btn:active:not(:disabled) {
-            transform: scale(0.98);
-        }
-
-        .start-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #718096;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #DC9450;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .question-card {
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .question-card.submitted {
-            pointer-events: none;
-        }
-
-        .question-number {
-            color: #DC9450;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-        }
-
-        .question-text {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-
-        .question-tag {
-            font-size: 0.7rem;
-            color: #a0aec0;
-            font-weight: 500;
-            text-align: right;
-            margin-bottom: 16px;
-            letter-spacing: 0.5px;
-        }
-
-        .answer-option {
-            background: #f7fafc;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .answer-option:active {
-            transform: scale(0.98);
-        }
-
-        .answer-option.selected {
-            background: rgba(220, 148, 80, 0.1);
-            border-color: #DC9450;
-        }
-
-        .answer-option.correct {
-            background: rgba(16, 185, 129, 0.15);
-            border-color: #10b981;
-            border-width: 3px;
-        }
-
-        .answer-option.incorrect {
-            background: rgba(239, 68, 68, 0.15);
-            border-color: #ef4444;
-            border-width: 3px;
-        }
-
-        .answer-option input {
-            margin-left: 12px;
-        }
-
-        .answer-option label {
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            font-size: 1rem;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.2rem;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-            transition: all 0.3s ease;
-            margin-top: 20px;
+            box-shadow: var(--shadow-primary);
+            transition: all var(--transition-base);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
 
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(247, 148, 29, 0.35);
+        }
+
+        .start-btn:active:not(:disabled) {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .start-btn:disabled {
+            background: var(--color-background-alt);
+            color: var(--color-text-tertiary);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* ========================================
+           Exam Screen
+           ======================================== */
+        #exam-form { display: none; }
+
+        /* Progress Bar - Prominent & Sticky */
+        .progress-bar {
+            background: var(--color-surface);
+            padding: 16px 20px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 20px;
+            position: sticky;
+            top: 8px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 2px solid var(--color-background-alt);
+        }
+
+        .back-home-btn {
+            background: var(--color-primary-light);
+            border: 2px solid var(--color-primary);
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-primary);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            white-space: nowrap;
+            display: none;
+        }
+
+        .back-home-btn:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .back-home-btn:active {
+            transform: scale(0.95);
+        }
+
+        .back-home-btn.show {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .progress-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-dark);
+        }
+
+        .progress-percentage {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            background: var(--color-primary-light);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .progress-track {
+            height: 10px;
+            background: var(--color-background-alt);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+            border-radius: 10px 10px 0 0;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--color-surface);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            margin-bottom: 16px;
+            border: 2px solid transparent;
+            transition: all var(--transition-base);
+            animation: questionSlideIn 0.4s ease backwards;
+        }
+
+        @keyframes questionSlideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .question-card.submitted {
+            pointer-events: none;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .question-number {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .question-number-badge {
+            width: 32px;
+            height: 32px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .question-tags {
+            display: flex;
+            gap: 6px;
+        }
+
+        .question-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-topic {
+            background: var(--color-dark);
+            color: white;
+        }
+
+        .tag-difficulty {
+            background: var(--color-background-alt);
+            color: var(--color-dark-tertiary);
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--color-dark);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Answer Options - Large Clickable Area (Fitts' Law) */
+        .answer-option {
+            background: var(--color-background);
+            padding: 18px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .answer-option:hover {
+            background: var(--color-primary-light);
+            border-color: var(--color-primary-glow);
+        }
+
+        .answer-option:active {
+            transform: scale(0.99);
+        }
+
+        .answer-option.selected {
+            background: var(--color-primary-light);
+            border-color: var(--color-primary);
+        }
+
+        .answer-option.selected .answer-indicator {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .answer-option.selected .answer-indicator::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .answer-option.correct {
+            background: var(--color-success-light);
+            border-color: var(--color-success);
+            border-width: 3px;
+        }
+
+        .answer-option.correct .answer-indicator {
+            background: var(--color-success);
+            border-color: var(--color-success);
+        }
+
+        .answer-option.correct .answer-indicator::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .answer-option.incorrect {
+            background: var(--color-error-light);
+            border-color: var(--color-error);
+            border-width: 3px;
+        }
+
+        .answer-option.incorrect .answer-indicator {
+            background: var(--color-error);
+            border-color: var(--color-error);
+        }
+
+        .answer-option.incorrect .answer-indicator::after {
+            content: '\f00d';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            font-size: 0.7rem;
+        }
+
+        .answer-indicator {
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
+            border: 2px solid var(--color-background-alt);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-base);
+            background: var(--color-surface);
+        }
+
+        .answer-text {
+            flex: 1;
+            font-size: 1rem;
+            color: var(--color-dark);
+            line-height: 1.5;
+        }
+
+        /* Hidden radio inputs */
+        .answer-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, var(--color-success) 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+            transition: all var(--transition-base);
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
         .submit-btn:active:not(:disabled) {
-            transform: scale(0.98);
+            transform: translateY(0) scale(0.98);
         }
 
         .submit-btn:disabled {
-            background: #ccc;
+            background: var(--color-background-alt);
+            color: var(--color-text-tertiary);
             cursor: not-allowed;
-            opacity: 0.7;
+            box-shadow: none;
         }
 
         .submit-btn.success {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, var(--color-success) 0%, #059669 100%);
         }
 
+        /* Loading Spinner */
         .btn-spinner {
             width: 20px;
             height: 20px;
@@ -255,144 +633,121 @@
             100% { transform: rotate(360deg); }
         }
 
-        .progress-bar {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-            position: sticky;
-            top: 20px;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .back-home-btn {
-            background: rgba(220, 148, 80, 0.15);
-            border: 2px solid #DC9450;
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-family: 'Rubik', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #DC9450;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            display: none;
-        }
-
-        .back-home-btn:active {
-            transform: scale(0.95);
-            background: rgba(220, 148, 80, 0.25);
-        }
-
-        .back-home-btn.show {
-            display: block;
-        }
-
-        .progress-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .progress-text {
-            font-size: 0.9rem;
-            color: #718096;
-            margin-bottom: 8px;
-        }
-
-        .progress-fill {
-            height: 8px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-fill-bar {
-            height: 100%;
-            background: linear-gradient(135deg, #DC9450 0%, #c77d3a 100%);
-            transition: width 0.3s ease;
-        }
-
-        .success-message {
-            background: white;
-            padding: 40px 25px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        .loading-screen {
             text-align: center;
+            padding: 60px 24px;
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
         }
 
-        .success-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--color-background-alt);
+            border-top: 4px solid var(--color-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 20px;
         }
 
-        .success-message h2 {
-            color: #2d3748;
-            font-size: 1.6rem;
-            margin-bottom: 10px;
-        }
-
-        .success-message p {
-            color: #718096;
+        .loading-text {
             font-size: 1rem;
-            margin-bottom: 25px;
-        }
-
-        .home-link {
-            display: inline-block;
-            padding: 14px 30px;
-            background: #DC9450;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
             font-weight: 600;
+            color: var(--color-text-secondary);
         }
 
-        #exam-form { display: none; }
+        /* Success Screen */
         #success-screen { display: none; }
+
+        /* ========================================
+           Responsive
+           ======================================== */
+        @media (max-width: 400px) {
+            body {
+                padding: 12px;
+            }
+
+            .info-header {
+                padding: 24px 20px;
+            }
+
+            .info-header h1 {
+                font-size: 1.3rem;
+            }
+
+            .question-card {
+                padding: 20px;
+            }
+
+            .answer-option {
+                padding: 16px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- מסך פרטים אישיים -->
+        <!-- Info Screen -->
         <div id="info-screen">
-            <div class="header">
-                <h1>🏆 מבחן סיום מט״ב</h1>
-                <p>25 שאלות · טראומה וחילוץ</p>
+            <div class="info-header">
+                <div class="info-header-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h1>מבחן סיום מט״ב</h1>
+                <p>
+                    <span>25 שאלות</span>
+                    <span class="dot"></span>
+                    <span>טראומה וחילוץ</span>
+                </p>
             </div>
 
             <div class="info-form">
                 <div class="form-group">
-                    <label>שם מלא</label>
+                    <label>
+                        <i class="fas fa-user"></i>
+                        שם מלא
+                    </label>
                     <input type="text" id="student-name" placeholder="הזן שם מלא">
                 </div>
 
                 <div class="form-group">
-                    <label>מספר אישי</label>
+                    <label>
+                        <i class="fas fa-id-card"></i>
+                        מספר אישי
+                    </label>
                     <input type="text" id="student-id" placeholder="הזן מספר אישי">
                 </div>
 
                 <div class="form-group">
-                    <label>שם היחידה</label>
+                    <label>
+                        <i class="fas fa-building"></i>
+                        שם היחידה
+                    </label>
                     <input type="text" id="student-unit" placeholder="הזן שם היחידה">
                 </div>
 
-                <button class="start-btn" id="start-btn" onclick="startExam()">התחל מבחן</button>
+                <button class="start-btn" id="start-btn" onclick="startExam()">
+                    <i class="fas fa-play"></i>
+                    התחל מבחן
+                </button>
             </div>
         </div>
 
-        <!-- מסך המבחן -->
+        <!-- Exam Screen -->
         <div id="exam-form">
             <div class="progress-bar">
-                <button class="back-home-btn" id="back-home-btn" onclick="goHome()">🏠 חזור לתפריט</button>
+                <button class="back-home-btn" id="back-home-btn" onclick="goHome()">
+                    <i class="fas fa-home"></i>
+                    חזור לתפריט
+                </button>
                 <div class="progress-info">
-                    <div class="progress-text">התקדמות: <span id="progress-num">0/25</span></div>
-                    <div class="progress-fill">
-                        <div class="progress-fill-bar" id="progress-bar"></div>
+                    <div class="progress-header">
+                        <span class="progress-text">התקדמות: <span id="progress-num">0/25</span></span>
+                        <span class="progress-percentage" id="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="progress-bar" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
@@ -400,41 +755,33 @@
             <div id="questions-container"></div>
 
             <button class="submit-btn" id="submit-btn" onclick="submitExam()" disabled>
+                <i class="fas fa-paper-plane"></i>
                 <span id="submit-text">שלח מבחן (ענה על כל השאלות)</span>
             </button>
         </div>
 
-        <!-- מסך הצלחה -->
+        <!-- Success Screen -->
         <div id="success-screen"></div>
 
-        <!-- מסך טעינה -->
-        <div id="loading-screen" class="loading" style="display: none;">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen" style="display: none;">
             <div class="loading-spinner"></div>
-            <p>טוען שאלות...</p>
+            <p class="loading-text">טוען שאלות...</p>
         </div>
     </div>
 
     <script>
-        // ⚙️ קונפיגורציה למבחן - מבחן סיום
+        // Exam Configuration
         const EXAM_CONFIG = {
             name: 'מבחן סיום מט״ב',
             totalQuestions: 25,
             sheet: 'exam_metav_1',
             distribution: {
-                trauma: {
-                    Easy: 2,     // 40% trauma × 20% easy = 2 שאלות
-                    Medium: 5,   // 40% trauma × 55% medium = 5 שאלות (תוקן מ-6)
-                    Hard: 3      // 40% trauma × 25% hard = 3 שאלות
-                },
-                rescue: {
-                    Easy: 2,     // 60% rescue × 10% easy = 2 שאלות
-                    Medium: 9,   // 60% rescue × 60% medium = 9 שאלות
-                    Hard: 4      // 60% rescue × 25% hard = 4 שאלות
-                }
+                trauma: { Easy: 2, Medium: 5, Hard: 3 },
+                rescue: { Easy: 2, Medium: 9, Hard: 4 }
             }
         };
 
-        // 🔗 TODO: החלף ב-URL של ה-Apps Script שלך!
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNophQs_dsKlGRFmB1SrEaKoHtarg5a88kMAEjMzafw0VQDhROASnf9bnVRn6QWpUK6A/exec?sheet=' + EXAM_CONFIG.sheet;
         const RESULTS_URL = 'https://script.google.com/macros/s/AKfycbzQ-px5HcK3nivAJwrHoRTDinTH7XthjXQQ5RQCiyi2nsL9GMnbZ-US_xljbTF7WmAe/exec';
 
@@ -442,77 +789,51 @@
         let examQuestions = [];
         let answers = {};
 
-        // טעינת שאלות מ-Google Sheets דרך Apps Script
+        // Load questions from Google Sheets
         async function loadQuestions() {
             try {
-                console.log('📡 טוען שאלות מ-' + EXAM_CONFIG.sheet);
+                console.log('Loading questions from ' + EXAM_CONFIG.sheet);
                 const response = await fetch(SCRIPT_URL);
                 const data = await response.json();
 
                 if (!data.success) {
-                    throw new Error(data.error || 'שגיאה בטעינת נתונים');
+                    throw new Error(data.error || 'Error loading data');
                 }
 
                 allQuestions = data.questions.filter(q =>
-                    q.question &&
-                    q.question.toString().trim() !== '' &&
-                    q.topic &&
-                    q.difficulty
+                    q.question && q.question.toString().trim() !== '' && q.topic && q.difficulty
                 );
 
-                console.log('🏆 נטענו ' + allQuestions.length + ' שאלות מהגיליון');
-                console.log('📝 דוגמה לשאלה:', allQuestions[0]);
+                console.log('Loaded ' + allQuestions.length + ' questions');
 
                 if (allQuestions.length === 0) {
-                    throw new Error('לא נמצאו שאלות בגיליון');
+                    throw new Error('No questions found');
                 }
             } catch (error) {
-                console.error('❌ שגיאה בטעינת שאלות:', error);
+                console.error('Error loading questions:', error);
                 throw error;
             }
         }
 
-        // הגרלת שאלות לפי נושא (topic) ורמת קושי (difficulty)
+        // Select questions by topic and difficulty
         function selectQuestions() {
             const selected = [];
             const dist = EXAM_CONFIG.distribution;
 
-            // בחירת שאלות טראומה
             for (const [difficulty, count] of Object.entries(dist.trauma)) {
-                const pool = allQuestions.filter(q =>
-                    q.topic === 'trauma' && q.difficulty === difficulty
-                );
-
-                if (pool.length < count) {
-                    console.warn(`⚠️ לא מספיק שאלות: trauma-${difficulty} (צריך ${count}, יש ${pool.length})`);
-                }
-
+                const pool = allQuestions.filter(q => q.topic === 'trauma' && q.difficulty === difficulty);
                 const picked = shuffleArray(pool).slice(0, count);
                 selected.push(...picked);
-                console.log(`🏆 נבחרו ${picked.length} שאלות: trauma-${difficulty}`);
             }
 
-            // בחירת שאלות חילוץ
             for (const [difficulty, count] of Object.entries(dist.rescue)) {
-                const pool = allQuestions.filter(q =>
-                    q.topic === 'rescue' && q.difficulty === difficulty
-                );
-
-                if (pool.length < count) {
-                    console.warn(`⚠️ לא מספיק שאלות: rescue-${difficulty} (צריך ${count}, יש ${pool.length})`);
-                }
-
+                const pool = allQuestions.filter(q => q.topic === 'rescue' && q.difficulty === difficulty);
                 const picked = shuffleArray(pool).slice(0, count);
                 selected.push(...picked);
-                console.log(`🏆 נבחרו ${picked.length} שאלות: rescue-${difficulty}`);
             }
 
             examQuestions = shuffleArray(selected);
-
-            const traumaCount = examQuestions.filter(q => q.topic === 'trauma').length;
-            const rescueCount = examQuestions.filter(q => q.topic === 'rescue').length;
-
-            console.log(`📊 סה"כ ${examQuestions.length} שאלות | טראומה: ${traumaCount} | חילוץ: ${rescueCount}`);
+            console.log('Selected ' + examQuestions.length + ' questions');
         }
 
         function shuffleArray(array) {
@@ -524,7 +845,7 @@
             return arr;
         }
 
-        // התחלת מבחן
+        // Start exam
         async function startExam() {
             const name = document.getElementById('student-name').value.trim();
             const id = document.getElementById('student-id').value.trim();
@@ -535,40 +856,37 @@
                 return;
             }
 
-            // השבתת כפתור ההתחלה
             const startBtn = document.getElementById('start-btn');
             startBtn.disabled = true;
-            startBtn.textContent = 'טוען שאלות...';
+            startBtn.innerHTML = '<div class="btn-spinner"></div> טוען שאלות...';
 
             try {
                 await loadQuestions();
-                
+
                 if (allQuestions.length === 0) {
                     throw new Error('לא נמצאו שאלות בגיליון');
                 }
-                
+
                 selectQuestions();
-                
+
                 if (examQuestions.length < 25) {
                     throw new Error(`לא מספיק שאלות: ${examQuestions.length}/25`);
                 }
-                
+
                 displayQuestions();
 
-                // מעבר למסך המבחן
                 document.getElementById('info-screen').style.display = 'none';
                 document.getElementById('exam-form').style.display = 'block';
             } catch (error) {
-                console.error('שגיאה:', error);
+                console.error('Error:', error);
                 alert('שגיאה בטעינת המבחן: ' + error.message);
-                
-                // החזרת הכפתור למצב תקין
+
                 startBtn.disabled = false;
-                startBtn.textContent = 'התחל מבחן';
+                startBtn.innerHTML = '<i class="fas fa-play"></i> התחל מבחן';
             }
         }
 
-        // הצגת שאלות
+        // Display questions
         function displayQuestions() {
             const container = document.getElementById('questions-container');
             container.innerHTML = '';
@@ -576,70 +894,71 @@
             examQuestions.forEach((q, index) => {
                 const card = document.createElement('div');
                 card.className = 'question-card';
+                card.style.animationDelay = `${index * 0.05}s`;
 
-                // המרת difficulty לאות (Easy → E, Medium → M, Hard → H)
-                const difficultyTag = q.difficulty ? q.difficulty.charAt(0).toUpperCase() : '';
-                // המרת topic לאות (trauma → T, rescue → R)
-                const topicTag = q.topic === 'trauma' ? 'T' : 'R';
+                const topicLabel = q.topic === 'trauma' ? 'T' : 'R';
+                const diffLabel = q.difficulty ? q.difficulty.charAt(0).toUpperCase() : '';
 
                 card.innerHTML = `
-                    <div class="question-number">שאלה ${index + 1} מתוך 25</div>
+                    <div class="question-header">
+                        <div class="question-number">
+                            <span class="question-number-badge">${index + 1}</span>
+                            <span>מתוך 25</span>
+                        </div>
+                        <div class="question-tags">
+                            <span class="question-tag tag-topic">${topicLabel}</span>
+                            <span class="question-tag tag-difficulty">${diffLabel}</span>
+                        </div>
+                    </div>
                     <div class="question-text">${q.question}</div>
-                    <div class="question-tag">${topicTag} | ${difficultyTag}</div>
-
-                    <div class="answer-option" onclick="selectAnswer(${index}, 1)">
-                        <label>
+                    <div class="answers-container">
+                        <div class="answer-option" onclick="selectAnswer(${index}, 1)">
                             <input type="radio" name="q${index}" value="1">
-                            ${q.answer1}
-                        </label>
-                    </div>
-
-                    <div class="answer-option" onclick="selectAnswer(${index}, 2)">
-                        <label>
+                            <span class="answer-indicator"></span>
+                            <span class="answer-text">${q.answer1}</span>
+                        </div>
+                        <div class="answer-option" onclick="selectAnswer(${index}, 2)">
                             <input type="radio" name="q${index}" value="2">
-                            ${q.answer2}
-                        </label>
-                    </div>
-
-                    <div class="answer-option" onclick="selectAnswer(${index}, 3)">
-                        <label>
+                            <span class="answer-indicator"></span>
+                            <span class="answer-text">${q.answer2}</span>
+                        </div>
+                        <div class="answer-option" onclick="selectAnswer(${index}, 3)">
                             <input type="radio" name="q${index}" value="3">
-                            ${q.answer3}
-                        </label>
-                    </div>
-
-                    <div class="answer-option" onclick="selectAnswer(${index}, 4)">
-                        <label>
+                            <span class="answer-indicator"></span>
+                            <span class="answer-text">${q.answer3}</span>
+                        </div>
+                        <div class="answer-option" onclick="selectAnswer(${index}, 4)">
                             <input type="radio" name="q${index}" value="4">
-                            ${q.answer4}
-                        </label>
+                            <span class="answer-indicator"></span>
+                            <span class="answer-text">${q.answer4}</span>
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // בחירת תשובה
+        // Select answer
         function selectAnswer(questionIndex, answerNum) {
             answers[questionIndex] = answerNum;
-            
+
             const card = document.querySelectorAll('.question-card')[questionIndex];
-            card.querySelectorAll('.answer-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
+            card.querySelectorAll('.answer-option').forEach(opt => opt.classList.remove('selected'));
             card.querySelectorAll('.answer-option')[answerNum - 1].classList.add('selected');
             card.querySelector(`input[value="${answerNum}"]`).checked = true;
 
             updateProgress();
         }
 
-        // עדכון פרוגרס
+        // Update progress
         function updateProgress() {
             const answered = Object.keys(answers).length;
-            document.getElementById('progress-num').textContent = `${answered}/25`;
-            document.getElementById('progress-bar').style.width = `${(answered / 25) * 100}%`;
+            const percent = Math.round((answered / 25) * 100);
 
-            // הפעלה/השבתה של כפתור השליחה
+            document.getElementById('progress-num').textContent = `${answered}/25`;
+            document.getElementById('progress-percent').textContent = `${percent}%`;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+
             const submitBtn = document.getElementById('submit-btn');
             const submitText = document.getElementById('submit-text');
 
@@ -652,45 +971,35 @@
             }
         }
 
-        // שליחת מבחן
+        // Submit exam
         async function submitExam() {
-            // בדיקה שענה על כל השאלות
             if (Object.keys(answers).length < 25) {
-                // מציאת השאלה הראשונה שלא נענתה
                 for (let i = 0; i < 25; i++) {
                     if (!answers[i]) {
                         const cards = document.querySelectorAll('.question-card');
                         const unansweredCard = cards[i];
-                        
-                        // גלילה לשאלה
+
                         unansweredCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        
-                        // הדגשה זמנית
-                        unansweredCard.style.border = '3px solid #ef4444';
-                        unansweredCard.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.5)';
-                        
+                        unansweredCard.style.border = '3px solid var(--color-error)';
+                        unansweredCard.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.3)';
+
                         setTimeout(() => {
-                            unansweredCard.style.border = '';
-                            unansweredCard.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.08)';
+                            unansweredCard.style.border = '2px solid transparent';
+                            unansweredCard.style.boxShadow = 'var(--shadow-md)';
                         }, 2000);
-                        
+
                         alert(`אנא ענה על שאלה ${i + 1} לפני שליחת המבחן`);
                         return;
                     }
                 }
             }
 
-            // השבתת כפתור השליחה והוספת אנימציית טעינה
             const submitBtn = document.getElementById('submit-btn');
             const submitText = document.getElementById('submit-text');
             submitBtn.disabled = true;
             submitText.innerHTML = '<div class="btn-spinner"></div> שולח מבחן...';
 
-            // חישוב ציון לפי topic
-            let traumaCorrect = 0;
-            let rescueCorrect = 0;
-            let traumaTotal = 0;
-            let rescueTotal = 0;
+            let traumaCorrect = 0, rescueCorrect = 0, traumaTotal = 0, rescueTotal = 0;
 
             examQuestions.forEach((q, index) => {
                 if (q.topic === 'trauma') {
@@ -706,109 +1015,75 @@
             const rescueScore = rescueTotal > 0 ? Math.round((rescueCorrect / rescueTotal) * 100) : 0;
             const totalScore = Math.round(((traumaCorrect + rescueCorrect) / 25) * 100);
 
-            console.log(`📊 טראומה: ${traumaCorrect}/${traumaTotal} (${traumaScore}%) | חילוץ: ${rescueCorrect}/${rescueTotal} (${rescueScore}%)`);
-
-            // שליחה ל-Google Sheets
             const data = {
                 name: document.getElementById('student-name').value,
                 id: document.getElementById('student-id').value,
                 unit: document.getElementById('student-unit').value,
-                examType: 'מבחן סיום מט״ב',
+                examType: EXAM_CONFIG.name,
                 scoreTrauma: traumaScore,
                 scoreRescue: rescueScore,
                 totalScore: totalScore
             };
 
             try {
-                const response = await fetch(RESULTS_URL, {
+                await fetch(RESULTS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
 
-                // במצב no-cors לא נוכל לקרוא את התגובה, אבל זה בסדר כי הנתונים נשלחו
-                console.log('🏆 המבחן נשלח בהצלחה ל-Google Sheets');
-
-                // הצגת תשובות נכונות ושגויות
-                try {
-                    showResults();
-                } catch (resultsError) {
-                    console.error('שגיאה בהצגת תוצאות:', resultsError);
-                }
-
-                // הצגת כפתור חזור לתפריט
+                showResults();
                 document.getElementById('back-home-btn').classList.add('show');
-
-                // שינוי הכפתור להצלחה
                 submitBtn.classList.add('success');
-                submitText.innerHTML = '✓ המבחן הוגש בהצלחה! - ניתן לראות את התוצאות כעת';
-
-                // גלילה לראש הדף
+                submitText.innerHTML = '<i class="fas fa-check"></i> המבחן הוגש בהצלחה!';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
 
             } catch (error) {
-                console.error('שגיאה בשליחה:', error);
+                console.error('Error submitting:', error);
                 alert('שגיאה בשליחת המבחן. אנא נסה שנית.');
-
-                // החזרת הכפתור למצב תקין
                 submitBtn.disabled = false;
-                submitText.textContent = 'שלח מבחן';
+                submitText.innerHTML = '<i class="fas fa-paper-plane"></i> שלח מבחן';
             }
         }
 
-        // הצגת תוצאות
+        // Show results
         function showResults() {
             const cards = document.querySelectorAll('.question-card');
-            console.log(`📊 מציג תוצאות עבור ${examQuestions.length} שאלות`);
 
             examQuestions.forEach((q, index) => {
-                try {
-                    const card = cards[index];
-                    if (!card) {
-                        console.error(`❌ לא נמצאה כרטיסייה עבור שאלה ${index + 1}`);
-                        return;
-                    }
+                const card = cards[index];
+                if (!card) return;
 
-                    card.classList.add('submitted');
+                card.classList.add('submitted');
+                const options = card.querySelectorAll('.answer-option');
+                const userAnswer = answers[index];
+                const correctAnswer = q.correct;
 
-                    const options = card.querySelectorAll('.answer-option');
-                    if (options.length < 4) {
-                        console.error(`❌ לא נמצאו מספיק אפשרויות עבור שאלה ${index + 1}`);
-                        return;
-                    }
-
-                    const userAnswer = answers[index];
-                    const correctAnswer = q.correct;
-
-                    // סימון התשובה של המשתמש
-                    if (userAnswer) {
-                        if (userAnswer === correctAnswer) {
-                            options[userAnswer - 1].classList.add('correct');
-                        } else {
-                            options[userAnswer - 1].classList.add('incorrect');
-                            // סימון התשובה הנכונה גם
-                            options[correctAnswer - 1].classList.add('correct');
-                        }
+                if (userAnswer) {
+                    if (userAnswer === correctAnswer) {
+                        options[userAnswer - 1].classList.add('correct');
                     } else {
-                        // אם לא ענה - רק סימון התשובה הנכונה
+                        options[userAnswer - 1].classList.add('incorrect');
                         options[correctAnswer - 1].classList.add('correct');
                     }
-
-                    console.log(`✓ שאלה ${index + 1}: תשובת משתמש=${userAnswer}, תשובה נכונה=${correctAnswer}`);
-                } catch (error) {
-                    console.error(`❌ שגיאה בשאלה ${index + 1}:`, error);
+                } else {
+                    options[correctAnswer - 1].classList.add('correct');
                 }
             });
-
-            console.log('🏆 סיום הצגת תוצאות');
         }
 
         function goHome() {
             window.location.href = 'index.html';
         }
+
+        // Prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) e.preventDefault();
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>

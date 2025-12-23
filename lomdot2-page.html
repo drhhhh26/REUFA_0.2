@@ -15,59 +15,119 @@
 
     <title>לומדות - מדור רפואה</title>
 
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet" crossorigin="anonymous">
-
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
-
-    <!-- Shared Styles -->
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        /* סטיילים ייחודיים לעמוד הלומדות */
-        .video-list {
+        /* Videos Page Specific Styles */
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            animation: fadeInDown 0.5s ease backwards;
+        }
+
+        .page-header-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--spacing-md);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            box-shadow: var(--shadow-primary);
+            color: white;
+        }
+
+        .page-header-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 800;
+            color: var(--color-dark);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .page-header-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+        }
+
+        /* Videos List */
+        .videos-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: var(--spacing-md);
         }
 
         .video-item {
-            border-radius: 14px;
-            animation: fadeInUp 0.6s ease-in-out backwards;
-            overflow: visible;
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all var(--transition-base);
+            animation: fadeInUp 0.4s ease backwards;
+        }
+
+        .video-item:nth-child(1) { animation-delay: 0.1s; }
+        .video-item:nth-child(2) { animation-delay: 0.15s; }
+        .video-item:nth-child(3) { animation-delay: 0.2s; }
+        .video-item:nth-child(4) { animation-delay: 0.25s; }
+        .video-item:nth-child(5) { animation-delay: 0.3s; }
+
+        .video-item:hover {
+            border-color: rgba(247, 148, 29, 0.15);
+            box-shadow: var(--shadow-lg);
         }
 
         .video-header {
             display: flex;
             align-items: center;
-            padding: 8px 10px;
+            padding: var(--spacing-lg);
             cursor: pointer;
-            transition: all 0.3s ease;
-            user-select: none;
+            transition: background var(--transition-fast);
+            position: relative;
+        }
+
+        .video-header::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--color-primary);
+            transform: scaleY(0);
+            transition: transform var(--transition-base);
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+        }
+
+        .video-item:hover .video-header::before {
+            transform: scaleY(1);
         }
 
         .video-header:active {
-            background: rgba(255, 190, 134, 0.1);
+            background: var(--color-background);
         }
 
         .video-icon {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
-            border-radius: 10px;
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-left: 10px;
-            box-shadow: 0 4px 12px rgba(245, 124, 0, 0.3);
-            font-size: 1.35rem;
-            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            margin-left: var(--spacing-md);
+            box-shadow: var(--shadow-primary);
+            transition: all 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .video-item:hover .video-icon {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
 
         .video-info {
@@ -76,83 +136,107 @@
         }
 
         .video-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #5D4E37;
-            margin-bottom: 2px;
+            font-size: var(--font-size-base);
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: 4px;
+            transition: color var(--transition-fast);
         }
 
-        .video-subtitle {
-            font-size: 0.8rem;
-            color: #8B7355;
-            font-weight: 500;
+        .video-item:hover .video-title {
+            color: var(--color-primary);
         }
 
-        .chevron-icon {
-            font-size: 1.2rem;
-            color: #8B7355;
-            transition: transform 0.3s ease;
+        .video-meta {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .video-item.expanded .chevron-icon {
-            transform: rotate(90deg);
+        .video-meta i {
+            color: var(--color-primary);
+            font-size: 0.65rem;
+        }
+
+        .video-toggle {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            background: rgba(247, 148, 29, 0.1);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-base);
+        }
+
+        .video-item.expanded .video-toggle {
+            transform: rotate(180deg);
         }
 
         .video-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
-            background: rgba(215, 201, 170, 0.2);
+            background: var(--color-background);
         }
 
         .video-item.expanded .video-content {
-            max-height: 120px;
+            max-height: 200px;
         }
 
-        .video-actions {
-            padding: 12px 14px;
-            display: flex;
-            gap: 10px;
+        .video-content-inner {
+            padding: var(--spacing-lg);
+            border-top: 1px solid var(--color-background-alt);
         }
 
-        .action-btn {
-            flex: 1;
-            background: linear-gradient(135deg, #FF9933 0%, #F57C00 100%);
+        .watch-btn {
+            width: 100%;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
             color: white;
             border: none;
-            padding: 12px 18px;
-            border-radius: 10px;
-            font-family: 'Rubik', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
+            font-size: var(--font-size-base);
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(245, 124, 0, 0.3);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-primary);
+            transition: all var(--transition-base);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: var(--spacing-sm);
         }
 
-        .action-btn:active {
-            transform: scale(0.97);
-            box-shadow: 0 2px 10px rgba(245, 124, 0, 0.4);
+        .watch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(247, 148, 29, 0.35);
         }
 
-        /* מסך טעינה */
-        .loading-screen {
+        .watch-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        /* Loading State */
+        .loading-container {
             text-align: center;
-            padding: 60px 20px;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
         }
 
         .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 153, 51, 0.2);
-            border-top: 4px solid #FF9933;
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--color-background-alt);
+            border-top: 4px solid var(--color-primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto var(--spacing-lg);
         }
 
         @keyframes spin {
@@ -161,157 +245,199 @@
         }
 
         .loading-text {
-            font-size: 1.1rem;
+            font-size: var(--font-size-base);
             font-weight: 600;
-            color: #5D4E37;
+            color: var(--color-text-secondary);
+        }
+
+        /* Error State */
+        .error-container {
+            text-align: center;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--color-error);
+        }
+
+        .error-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--spacing-md);
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-error);
+            font-size: 1.75rem;
+        }
+
+        .error-title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: var(--spacing-sm);
         }
 
         .error-message {
-            background: rgba(239, 68, 68, 0.1);
-            border: 2px solid #ef4444;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            color: #991b1b;
-            text-align: center;
-            font-weight: 600;
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+            margin-bottom: var(--spacing-lg);
         }
 
-        @media (max-width: 360px) {
-            .video-title {
-                font-size: 1rem;
-            }
+        .retry-btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: var(--color-error);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-family);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
 
-            .video-icon {
-                width: 45px;
-                height: 45px;
-                font-size: 1.5rem;
-            }
+        .retry-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Empty State */
+        .empty-container {
+            text-align: center;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--spacing-md);
+            background: var(--color-background);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-tertiary);
+            font-size: 1.75rem;
+        }
+
+        .empty-title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            color: var(--color-dark);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .empty-message {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header with Navigation -->
         <div class="header">
             <button class="back-btn" onclick="goBack()">
                 <i class="fas fa-arrow-right"></i>
             </button>
             <h1 class="page-title">לומדות</h1>
             <button class="home-btn" onclick="goHome()">
-                🏠
+                <i class="fas fa-home"></i>
             </button>
         </div>
 
-        <!-- מסך טעינה -->
-        <div id="loading-screen" class="loading-screen">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">טוען סרטונים...</div>
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-icon">
+                <i class="fas fa-play-circle"></i>
+            </div>
+            <h2 class="page-header-title">סרטוני הדרכה</h2>
+            <p class="page-header-subtitle">לחץ על סרטון כדי לצפות</p>
         </div>
 
-        <!-- הודעת שגיאה -->
-        <div id="error-screen" style="display: none;">
-            <div class="error-message">
-                <div style="font-size: 2rem; margin-bottom: 10px;">⚠️</div>
-                <div id="error-text">שגיאה בטעינת הסרטונים</div>
+        <!-- Videos Container -->
+        <div id="videos-container">
+            <div class="loading-container">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">טוען סרטונים...</p>
             </div>
         </div>
-
-        <!-- רשימת סרטונים -->
-        <div id="video-list" class="video-list" style="display: none;"></div>
     </div>
 
     <script>
-        // כתובת ה-Apps Script שיחזיר את רשימת הסרטונים
         const VIDEOS_URL = 'https://script.google.com/macros/s/AKfycbzT_F2coz6EOWSFER7dyRs9rq4NNLWDqTq2Xw2mQnpp3mvOS-4EKeNksK1JQrF_A3w/exec';
 
         let videos = [];
         let lastLoadTime = 0;
-        const RATE_LIMIT_MS = 2000; // מינימום 2 שניות בין טעינות
+        const RATE_LIMIT_MS = 2000;
 
-        // בדיקת URL תקין ובטוח
         function isValidUrl(url) {
             if (!url || typeof url !== 'string') return false;
-
             try {
                 const urlObj = new URL(url);
-                // רק HTTPS וממקורות מהימנים
                 return urlObj.protocol === 'https:' &&
                        (urlObj.hostname === 'drive.google.com' ||
                         urlObj.hostname === 'script.google.com' ||
                         urlObj.hostname === 'script.googleusercontent.com');
-            } catch (e) {
+            } catch {
                 return false;
             }
         }
 
-        // טעינת סרטונים מ-Google Sheets
         async function loadVideos() {
-            // Rate limiting
             const now = Date.now();
             if (now - lastLoadTime < RATE_LIMIT_MS) {
-                console.warn('⏱️ המתן לפני טעינה מחדש');
+                console.warn('Rate limited');
                 return;
             }
             lastLoadTime = now;
 
-            console.log('🔄 מתחיל טעינת סרטונים...');
-            console.log('📍 URL:', VIDEOS_URL);
+            const container = document.getElementById('videos-container');
 
             try {
-                console.log('📡 שולח בקשה ל-Google Apps Script...');
-                // הסרת headers כדי למנוע CORS preflight request
+                console.log('Loading videos...');
                 const response = await fetch(VIDEOS_URL);
 
-                console.log('📊 תגובה התקבלה. Status:', response.status);
-
                 if (!response.ok) {
-                    throw new Error(`שגיאת שרת: ${response.status}`);
+                    throw new Error(`Server error: ${response.status}`);
                 }
 
                 const data = await response.json();
-                console.log('📦 נתונים:', data);
+                console.log('Response:', data);
 
                 if (!data.success) {
-                    console.error('❌ data.success = false');
-                    throw new Error(data.error || 'שגיאה בטעינת נתונים');
+                    throw new Error(data.error || 'Error loading data');
                 }
 
-                console.log(`📋 ${data.videos.length} סרטונים נמצאו`);
-
-                // סינון וולידציה של הסרטונים
                 videos = data.videos
-                    .filter(v => {
-                        const valid = v.title && v.title.trim() !== '' && v.url;
-                        if (!valid) console.warn('⚠️ סרטון לא תקין:', v);
-                        return valid;
-                    })
-                    .filter(v => {
-                        const valid = isValidUrl(v.url);
-                        if (!valid) console.warn('⚠️ URL לא תקין:', v.url);
-                        return valid;
-                    })
+                    .filter(v => v.title && v.title.trim() !== '' && v.url && isValidUrl(v.url))
                     .map(v => ({
                         title: String(v.title).substring(0, 200),
                         emoji: String(v.emoji || '🎥').substring(0, 10),
                         url: v.url
                     }));
 
-                console.log(`✅ ${videos.length} סרטונים תקינים`);
-
                 if (videos.length === 0) {
-                    throw new Error('לא נמצאו סרטונים תקינים');
+                    showEmptyState(container);
+                    return;
                 }
 
-                displayVideos();
+                displayVideos(container);
 
             } catch (error) {
-                console.error('❌ שגיאה בטעינת סרטונים:', error);
-                console.error('📋 פרטי שגיאה:', error.message, error.stack);
-                showError('לא ניתן לטעון את הסרטונים כרגע. אנא נסה שוב מאוחר יותר.');
+                console.error('Error loading videos:', error);
+                showErrorState(container);
             }
         }
 
-        // escape HTML לאבטחה
         function escapeHtml(text) {
             if (!text) return '';
             const div = document.createElement('div');
@@ -319,97 +445,88 @@
             return div.innerHTML;
         }
 
-        // הצגת סרטונים
-        function displayVideos() {
-            const container = document.getElementById('video-list');
-            container.innerHTML = '';
+        function displayVideos(container) {
+            let html = '<div class="videos-list">';
 
             videos.forEach((video, index) => {
-                const videoItem = document.createElement('div');
-                videoItem.className = 'video-item';
-                videoItem.style.animationDelay = `${0.3 + index * 0.05}s`;
-
-                // יצירת המבנה
-                const videoHeader = document.createElement('div');
-                videoHeader.className = 'video-header';
-                videoHeader.onclick = function() { toggleVideo(videoItem); };
-
-                videoHeader.innerHTML = `
-                    <div class="video-icon">${video.emoji || '🎥'}</div>
-                    <div class="video-info">
-                        <div class="video-title">${escapeHtml(video.title)}</div>
-                        <div class="video-subtitle">לחץ לצפייה</div>
+                html += `
+                    <div class="video-item" style="animation-delay: ${0.1 + index * 0.05}s">
+                        <div class="video-header" onclick="toggleVideo(${index})">
+                            <div class="video-icon">${video.emoji}</div>
+                            <div class="video-info">
+                                <div class="video-title">${escapeHtml(video.title)}</div>
+                                <div class="video-meta">
+                                    <i class="fas fa-video"></i>
+                                    <span>סרטון הדרכה</span>
+                                </div>
+                            </div>
+                            <div class="video-toggle">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                        <div class="video-content">
+                            <div class="video-content-inner">
+                                <button class="watch-btn" onclick="openVideo('${video.url}')">
+                                    <i class="fas fa-play"></i>
+                                    צפה בסרטון
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <span class="chevron-icon">◀</span>
                 `;
-
-                const videoContent = document.createElement('div');
-                videoContent.className = 'video-content';
-
-                const videoActions = document.createElement('div');
-                videoActions.className = 'video-actions';
-
-                const actionBtn = document.createElement('button');
-                actionBtn.className = 'action-btn';
-                actionBtn.innerHTML = '▶️ צפה בסרטון';
-                actionBtn.onclick = function(e) {
-                    e.stopPropagation();
-                    openVideo(video.url);
-                };
-
-                videoActions.appendChild(actionBtn);
-                videoContent.appendChild(videoActions);
-                videoItem.appendChild(videoHeader);
-                videoItem.appendChild(videoContent);
-                container.appendChild(videoItem);
             });
 
-            // הסתרת מסך טעינה והצגת רשימה
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('video-list').style.display = 'flex';
-
-            console.log(`✅ ${videos.length} סרטונים מוצגים בממשק`);
+            html += '</div>';
+            container.innerHTML = html;
         }
 
-        // הצגת שגיאה
-        function showError(message) {
-            document.getElementById('loading-screen').style.display = 'none';
-            document.getElementById('error-screen').style.display = 'block';
-            document.getElementById('error-text').textContent = message;
-        }
-
-        // פתיחה/סגירה של סרטון
-        function toggleVideo(element) {
-            // סגור את כל האחרים
-            document.querySelectorAll('.video-item').forEach(item => {
-                if (item !== element) {
+        function toggleVideo(index) {
+            const items = document.querySelectorAll('.video-item');
+            items.forEach((item, i) => {
+                if (i === index) {
+                    item.classList.toggle('expanded');
+                } else {
                     item.classList.remove('expanded');
                 }
             });
-
-            // פתח/סגור את הנוכחי
-            element.classList.toggle('expanded');
         }
 
-        // פתיחת סרטון
         function openVideo(url) {
-            // ולידציה נוספת לפני פתיחה
-            if (!isValidUrl(url)) {
-                console.error('URL לא תקין');
-                alert('קישור לא תקין');
-                return;
-            }
-
-            // פתיחה עם אבטחה
-            const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-            if (newWindow) {
-                newWindow.opener = null; // מניעת גישה לחלון המקורי
+            if (isValidUrl(url)) {
+                const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+                if (newWindow) newWindow.opener = null;
             }
         }
 
-        // חזרה
+        function showErrorState(container) {
+            container.innerHTML = `
+                <div class="error-container">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3 class="error-title">שגיאה בטעינה</h3>
+                    <p class="error-message">לא ניתן לטעון את הסרטונים כרגע</p>
+                    <button class="retry-btn" onclick="loadVideos()">
+                        <i class="fas fa-redo"></i>
+                        נסה שוב
+                    </button>
+                </div>
+            `;
+        }
+
+        function showEmptyState(container) {
+            container.innerHTML = `
+                <div class="empty-container">
+                    <div class="empty-icon">
+                        <i class="fas fa-video-slash"></i>
+                    </div>
+                    <h3 class="empty-title">אין סרטונים</h3>
+                    <p class="empty-message">לא נמצאו סרטוני הדרכה כרגע</p>
+                </div>
+            `;
+        }
+
         function goBack() {
-            // בדיקה שיש היסטוריה
             if (window.history.length > 1) {
                 window.history.back();
             } else {
@@ -417,23 +534,19 @@
             }
         }
 
-        // חזרה לבית
         function goHome() {
-            // מניעת open redirect
             window.location.href = './index.html';
         }
 
-        // מניעת זום כפול
+        // Prevent double-tap zoom
         let lastTouchEnd = 0;
         document.addEventListener('touchend', function(e) {
             const now = Date.now();
-            if (now - lastTouchEnd <= 300) {
-                e.preventDefault();
-            }
+            if (now - lastTouchEnd <= 300) e.preventDefault();
             lastTouchEnd = now;
         }, false);
 
-        // טעינה בעת העלאת הדף
+        // Load on page load
         window.addEventListener('load', loadVideos);
     </script>
 </body>
