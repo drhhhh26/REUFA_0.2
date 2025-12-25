@@ -426,27 +426,13 @@
         // ⚙️ קונפיגורציה למבחן - מבחן פתיחה
         const EXAM_CONFIG = {
             name: 'מבחן פתיחה מט״ב',
-            totalQuestions: 25,
-            sheet: 'exam_metav_1',
-            distribution: {
-                trauma: {
-                    Easy: 4,     // 70% trauma × 20% easy = 4 שאלות
-                    Medium: 8,   // 70% trauma × 50% medium = 8 שאלות (תוקן מ-9)
-                    Hard: 5      // 70% trauma × 30% hard = 5 שאלות
-                },
-                rescue: {
-                    Easy: 4,     // 30% rescue × 50% easy = 4 שאלות
-                    Medium: 3,   // 30% rescue × 35% medium = 3 שאלות
-                    Hard: 1      // 30% rescue × 15% hard = 1 שאלה
-                }
-            }
+            sheet: 'exam_metav_1'
         };
 
         // 🔗 TODO: החלף ב-URL של ה-Apps Script שלך!
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNophQs_dsKlGRFmB1SrEaKoHtarg5a88kMAEjMzafw0VQDhROASnf9bnVRn6QWpUK6A/exec?sheet=' + EXAM_CONFIG.sheet;
         const RESULTS_URL = 'https://script.google.com/macros/s/AKfycbzQ-px5HcK3nivAJwrHoRTDinTH7XthjXQQ5RQCiyi2nsL9GMnbZ-US_xljbTF7WmAe/exec';
 
-        let allQuestions = [];
         let examQuestions = [];
         let answers = {};
 
@@ -461,18 +447,17 @@
                     throw new Error(data.error || 'שגיאה בטעינת נתונים');
                 }
 
-                allQuestions = data.questions.filter(q =>
+                examQuestions = data.questions.filter(q =>
                     q.question &&
                     q.question.toString().trim() !== '' &&
                     q.topic &&
                     q.difficulty
                 );
 
-                console.log('✅ נטענו ' + allQuestions.length + ' שאלות מהגיליון');
-                console.log('📝 דוגמה לשאלה:', allQuestions[0]);
+                console.log('✅ נטענו ' + examQuestions.length + ' שאלות מהגיליון');
 
-                if (allQuestions.length === 0) {
-                    throw new Error('לא נמצאו שאלות בגיליון');
+                if (examQuestions.length !== 25) {
+                    throw new Error(`נדרשות בדיוק 25 שאלות בגיליון, נמצאו ${examQuestions.length}`);
                 }
             } catch (error) {
                 console.error('❌ שגיאה בטעינת שאלות:', error);
@@ -480,57 +465,6 @@
             }
         }
 
-        // הגרלת שאלות לפי נושא (topic) ורמת קושי (difficulty)
-        function selectQuestions() {
-            const selected = [];
-            const dist = EXAM_CONFIG.distribution;
-
-            // בחירת שאלות טראומה
-            for (const [difficulty, count] of Object.entries(dist.trauma)) {
-                const pool = allQuestions.filter(q =>
-                    q.topic === 'trauma' && q.difficulty === difficulty
-                );
-
-                if (pool.length < count) {
-                    console.warn(`⚠️ לא מספיק שאלות: trauma-${difficulty} (צריך ${count}, יש ${pool.length})`);
-                }
-
-                const picked = shuffleArray(pool).slice(0, count);
-                selected.push(...picked);
-                console.log(`✅ נבחרו ${picked.length} שאלות: trauma-${difficulty}`);
-            }
-
-            // בחירת שאלות חילוץ
-            for (const [difficulty, count] of Object.entries(dist.rescue)) {
-                const pool = allQuestions.filter(q =>
-                    q.topic === 'rescue' && q.difficulty === difficulty
-                );
-
-                if (pool.length < count) {
-                    console.warn(`⚠️ לא מספיק שאלות: rescue-${difficulty} (צריך ${count}, יש ${pool.length})`);
-                }
-
-                const picked = shuffleArray(pool).slice(0, count);
-                selected.push(...picked);
-                console.log(`✅ נבחרו ${picked.length} שאלות: rescue-${difficulty}`);
-            }
-
-            examQuestions = shuffleArray(selected);
-
-            const traumaCount = examQuestions.filter(q => q.topic === 'trauma').length;
-            const rescueCount = examQuestions.filter(q => q.topic === 'rescue').length;
-
-            console.log(`📊 סה"כ ${examQuestions.length} שאלות | טראומה: ${traumaCount} | חילוץ: ${rescueCount}`);
-        }
-
-        function shuffleArray(array) {
-            const arr = [...array];
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
-            }
-            return arr;
-        }
 
         // התחלת מבחן
         async function startExam() {
@@ -550,17 +484,6 @@
 
             try {
                 await loadQuestions();
-                
-                if (allQuestions.length === 0) {
-                    throw new Error('לא נמצאו שאלות בגיליון');
-                }
-                
-                selectQuestions();
-                
-                if (examQuestions.length < 25) {
-                    throw new Error(`לא מספיק שאלות: ${examQuestions.length}/25`);
-                }
-                
                 displayQuestions();
 
                 // מעבר למסך המבחן
