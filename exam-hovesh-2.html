@@ -436,6 +436,46 @@
         let examQuestions = [];
         let answers = {};
 
+        // פונקציה לערבוב מערך (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // פונקציה לערבוב תשובות בכל שאלה
+        function shuffleAnswers(questions) {
+            return questions.map(q => {
+                // יצירת מערך של התשובות עם האינדקס המקורי
+                const answers = [
+                    { text: q.answer1, originalIndex: 1 },
+                    { text: q.answer2, originalIndex: 2 },
+                    { text: q.answer3, originalIndex: 3 },
+                    { text: q.answer4, originalIndex: 4 }
+                ];
+
+                // ערבוב התשובות
+                const shuffledAnswers = shuffleArray(answers);
+
+                // מציאת האינדקס החדש של התשובה הנכונה
+                const newCorrectIndex = shuffledAnswers.findIndex(
+                    a => a.originalIndex === q.correct
+                ) + 1;
+
+                return {
+                    ...q,
+                    answer1: shuffledAnswers[0].text,
+                    answer2: shuffledAnswers[1].text,
+                    answer3: shuffledAnswers[2].text,
+                    answer4: shuffledAnswers[3].text,
+                    correct: newCorrectIndex
+                };
+            });
+        }
+
         // טעינת שאלות מ-Google Sheets דרך Apps Script
         async function loadQuestions() {
             try {
@@ -459,6 +499,12 @@
                 if (examQuestions.length !== 25) {
                     throw new Error(`נדרשות בדיוק 25 שאלות בגיליון, נמצאו ${examQuestions.length}`);
                 }
+
+                // ערבוב תשובות ושאלות
+                examQuestions = shuffleAnswers(examQuestions);
+                examQuestions = shuffleArray(examQuestions);
+
+                console.log('🔀 השאלות והתשובות עורבבו');
             } catch (error) {
                 console.error('❌ שגיאה בטעינת שאלות:', error);
                 throw error;
