@@ -99,12 +99,30 @@ A beautiful, real-time analytics dashboard with:
 
 ## 🔧 Technical Details
 
-**Apps Script Changes Required:**
-- Add `doPost()` handler for statistics
-- Add `doGet(?action=statistics)` endpoint
-- Create `exam_statistics` sheet
+**Apps Script Architecture - 2 Separate Files:**
 
-**Sheet Structure:**
+### Apps Script #1: Questions (existing file)
+- **File:** "מאגר שאלות - מדור רפואה"
+- **Purpose:** Load exam questions
+- **Endpoint:** `doGet(?sheet=exam_hovesh_1)`
+- Used by: SCRIPT_URL
+
+### Apps Script #2: Statistics (NEW separate file!)
+- **File:** "סטטיסטיקות מבחנים - מדור רפואה"
+- **Purpose:** Save and retrieve anonymous statistics
+- **Endpoints:**
+  - `doPost()` - Save statistics
+  - `doGet()` - Retrieve statistics for dashboard
+- Used by: STATISTICS_URL
+
+**Benefits of Separation:**
+- ✅ Complete separation of concerns
+- ✅ Better privacy
+- ✅ Easier to manage
+- ✅ Can share statistics without exposing questions
+- ✅ Independent permissions
+
+**Sheet Structure (in statistics file):**
 ```
 exam_statistics:
 timestamp | exam_name | question_text | topic | difficulty | is_correct
@@ -143,6 +161,7 @@ Real-time charts & insights
 2. **9abd92a** - Add question and answer shuffling to all exams
 3. **a1b28b0** - Add anonymous statistics collection to all exams
 4. **9eeb081** - Add stunning instructor statistics dashboard
+5. **a8a88cb** - Separate statistics to independent Apps Script
 
 ## ✅ Testing Checklist
 
@@ -185,11 +204,26 @@ All setup instructions included in:
 
 ## 🚀 Next Steps After Merging
 
-1. Update Apps Script with new code
-2. Create `exam_statistics` sheet
-3. Add 25 questions to each exam sheet
-4. Test one exam end-to-end
-5. View the dashboard!
+1. **Create separate statistics file:**
+   - New Google Sheet: "סטטיסטיקות מבחנים"
+   - Add `exam_statistics` sheet with columns
+   - Deploy Apps Script from STATISTICS_SETUP.md
+   - Copy the URL
+
+2. **Update URLs in code:**
+   - Update `STATISTICS_URL` in all 4 exam files
+   - Update `STATISTICS_URL` in instructor-dashboard.html
+
+3. **Questions file (existing):**
+   - Add 25 questions to each exam sheet
+   - Ensure Apps Script is deployed
+
+4. **Test:**
+   - Complete one exam end-to-end
+   - Check statistics appear in sheet
+   - View the dashboard!
+
+See `STATISTICS_SETUP.md` for detailed instructions!
 
 ---
 
