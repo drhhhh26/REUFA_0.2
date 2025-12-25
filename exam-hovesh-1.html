@@ -429,9 +429,12 @@
             sheet: 'exam_hovesh_1'
         };
 
-        // 🔗 Apps Script URL
+        // 🔗 Apps Script URLs
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNophQs_dsKlGRFmB1SrEaKoHtarg5a88kMAEjMzafw0VQDhROASnf9bnVRn6QWpUK6A/exec?sheet=' + EXAM_CONFIG.sheet;
         const RESULTS_URL = 'https://script.google.com/macros/s/AKfycbzQ-px5HcK3nivAJwrHoRTDinTH7XthjXQQ5RQCiyi2nsL9GMnbZ-US_xljbTF7WmAe/exec';
+
+        // 🔗 TODO: הוסף כאן את ה-URL של Apps Script לסטטיסטיקות!
+        const STATISTICS_URL = 'YOUR_STATISTICS_APPS_SCRIPT_URL_HERE';
 
         let examQuestions = [];
         let answers = {};
@@ -715,8 +718,8 @@
                     body: JSON.stringify(data)
                 });
 
-                // שליחת סטטיסטיקות אנונימיות
-                await fetch(RESULTS_URL, {
+                // שליחת סטטיסטיקות אנונימיות לקובץ נפרד
+                await fetch(STATISTICS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
