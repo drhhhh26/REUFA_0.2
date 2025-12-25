@@ -685,19 +685,28 @@
 
             console.log(`📊 טראומה: ${traumaCorrect}/${traumaTotal} (${traumaScore}%) | חילוץ: ${rescueCorrect}/${rescueTotal} (${rescueScore}%)`);
 
-            // שליחה ל-Google Sheets
+            // שליחה ל-Google Sheets - תוצאות אישיות
             const data = {
                 name: document.getElementById('student-name').value,
                 id: document.getElementById('student-id').value,
                 unit: document.getElementById('student-unit').value,
-                examType: 'מבחן פתיחה מט״ב',
-                scoreTrauma: traumaScore,
-                scoreRescue: rescueScore,
-                totalScore: totalScore
+                exam: EXAM_CONFIG.name,
+                score: (traumaCorrect + rescueCorrect),
+                total: 25
             };
 
+            // הכנת נתוני סטטיסטיקות אנונימיים
+            const statistics = examQuestions.map((q, index) => ({
+                exam_name: EXAM_CONFIG.name,
+                question_text: q.question,
+                topic: q.topic,
+                difficulty: q.difficulty,
+                is_correct: answers[index] === q.correct
+            }));
+
             try {
-                const response = await fetch(RESULTS_URL, {
+                // שליחת תוצאות אישיות
+                await fetch(RESULTS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: {
@@ -706,8 +715,17 @@
                     body: JSON.stringify(data)
                 });
 
-                // במצב no-cors לא נוכל לקרוא את התגובה, אבל זה בסדר כי הנתונים נשלחו
-                console.log('✅ המבחן נשלח בהצלחה ל-Google Sheets');
+                // שליחת סטטיסטיקות אנונימיות
+                await fetch(RESULTS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ statistics: statistics })
+                });
+
+                console.log('✅ המבחן והסטטיסטיקות נשלחו בהצלחה ל-Google Sheets');
 
                 // הצגת תשובות נכונות ושגויות
                 try {
