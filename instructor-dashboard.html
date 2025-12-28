@@ -372,6 +372,27 @@
             transform: translateY(0);
         }
 
+        .password-back {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: #718096;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 0.95em;
+            font-weight: 500;
+            font-family: 'Rubik', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .password-back:hover {
+            background: #f7fafc;
+            border-color: #cbd5e0;
+            color: #4a5568;
+        }
+
         .error-message {
             color: #fc8181;
             margin-top: 10px;
@@ -457,6 +478,7 @@
             <p>הזן סיסמה לצפייה בסטטיסטיקות</p>
             <input type="password" id="passwordInput" class="password-input" placeholder="סיסמה" autocomplete="off">
             <button onclick="checkPassword()" class="password-submit">כניסה</button>
+            <button onclick="window.location.href='index.html'" class="password-back">חזרה לעמוד הבית</button>
             <div id="errorMessage" class="error-message">סיסמה שגויה, נסה שנית</div>
         </div>
     </div>
@@ -519,10 +541,7 @@
                         <option value="Medium">בינוני</option>
                         <option value="Hard">קשה</option>
                     </select>
-                </div>
-                <div class="filter-group" style="margin-top: 15px;">
-                    <input type="date" id="filter-date-from" class="date-filter" placeholder="מתאריך">
-                    <input type="date" id="filter-date-to" class="date-filter" placeholder="עד תאריך">
+                    <input type="date" id="filter-date" class="date-filter" title="סינון לפי תאריך">
                     <button onclick="applyFilters()">החל סינון</button>
                     <button onclick="resetFilters()" style="background: #718096;">אפס סינון</button>
                 </div>
@@ -918,8 +937,7 @@
             const exam = document.getElementById('filter-exam').value;
             const topic = document.getElementById('filter-topic').value;
             const difficulty = document.getElementById('filter-difficulty').value;
-            const dateFrom = document.getElementById('filter-date-from').value;
-            const dateTo = document.getElementById('filter-date-to').value;
+            const filterDate = document.getElementById('filter-date').value;
 
             filteredData = allData.filter(d => {
                 // סינון לפי מבחן
@@ -932,7 +950,7 @@
                 if (difficulty !== 'all' && d.difficulty !== difficulty) return false;
 
                 // סינון לפי תאריך
-                if (dateFrom || dateTo) {
+                if (filterDate) {
                     const timestamp = d.timestamp;
                     if (!timestamp) return false;
 
@@ -945,9 +963,8 @@
                         recordDate = new Date(timestamp).toISOString().split('T')[0];
                     }
 
-                    // בדיקה מול טווח התאריכים
-                    if (dateFrom && recordDate < dateFrom) return false;
-                    if (dateTo && recordDate > dateTo) return false;
+                    // בדיקה התאמה לתאריך המבוקש
+                    if (recordDate !== filterDate) return false;
                 }
 
                 return true;
@@ -962,8 +979,7 @@
             document.getElementById('filter-exam').value = 'all';
             document.getElementById('filter-topic').value = 'all';
             document.getElementById('filter-difficulty').value = 'all';
-            document.getElementById('filter-date-from').value = '';
-            document.getElementById('filter-date-to').value = '';
+            document.getElementById('filter-date').value = '';
 
             filteredData = [...allData];
             console.log('🔄 הפילטרים אופסו');
