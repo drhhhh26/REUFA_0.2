@@ -114,7 +114,7 @@
             gap: 15px;
         }
 
-        .filter-group select, .filter-group button {
+        .filter-group select, .filter-group button, .filter-group input.date-filter {
             padding: 12px 20px;
             border-radius: 8px;
             border: 2px solid #e2e8f0;
@@ -123,9 +123,14 @@
             transition: all 0.3s ease;
         }
 
-        .filter-group select:focus {
+        .filter-group select:focus, .filter-group input.date-filter:focus {
             outline: none;
             border-color: #667eea;
+        }
+
+        .filter-group input.date-filter {
+            background: white;
+            color: #2d3748;
         }
 
         .filter-group button {
@@ -285,6 +290,121 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.3);
         }
 
+        /* מודל סיסמה */
+        .password-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .password-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .password-box h2 {
+            margin-bottom: 10px;
+            color: #2d3748;
+            font-size: 1.8em;
+        }
+
+        .password-box p {
+            margin-bottom: 25px;
+            color: #718096;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-family: 'Rubik', sans-serif;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .password-input.error {
+            border-color: #fc8181;
+            animation: shake 0.5s ease;
+        }
+
+        .password-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            font-family: 'Rubik', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .password-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .password-submit:active {
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #fc8181;
+            margin-top: 10px;
+            font-size: 0.9em;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
         @keyframes fadeInDown {
             from {
                 opacity: 0;
@@ -330,6 +450,17 @@
     </style>
 </head>
 <body>
+    <!-- מודל סיסמה -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-box">
+            <h2>🔒 גישה למדריכים בלבד</h2>
+            <p>הזן סיסמה לצפייה בסטטיסטיקות</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="סיסמה" autocomplete="off">
+            <button onclick="checkPassword()" class="password-submit">כניסה</button>
+            <div id="errorMessage" class="error-message">סיסמה שגויה, נסה שנית</div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>📊 דאשבורד סטטיסטיקות מבחנים</h1>
@@ -388,7 +519,12 @@
                         <option value="Medium">בינוני</option>
                         <option value="Hard">קשה</option>
                     </select>
+                </div>
+                <div class="filter-group" style="margin-top: 15px;">
+                    <input type="date" id="filter-date-from" class="date-filter" placeholder="מתאריך">
+                    <input type="date" id="filter-date-to" class="date-filter" placeholder="עד תאריך">
                     <button onclick="applyFilters()">החל סינון</button>
+                    <button onclick="resetFilters()" style="background: #718096;">אפס סינון</button>
                 </div>
             </div>
 
@@ -429,10 +565,43 @@
     <script>
         // 🔗 Apps Script URL לסטטיסטיקות (קובץ נפרד)
         const STATISTICS_URL = 'https://script.google.com/macros/s/AKfycbwId2JjtTY3swtq80B8MUsJ_CrPQPzWKHL5l1zj8cAX2185dc9r4o-aClPRKOeGXuVUSQ/exec';
+        const CORRECT_PASSWORD = 'רפואה2025';
 
         let allData = [];
         let filteredData = [];
         let charts = {};
+        let isAuthenticated = false;
+
+        // בדיקת סיסמה
+        function checkPassword() {
+            const input = document.getElementById('passwordInput');
+            const password = input.value;
+            const errorMsg = document.getElementById('errorMessage');
+
+            if (password === CORRECT_PASSWORD) {
+                isAuthenticated = true;
+                document.getElementById('passwordModal').style.display = 'none';
+                loadData();
+            } else {
+                input.classList.add('error');
+                errorMsg.classList.add('show');
+                input.value = '';
+                setTimeout(() => {
+                    input.classList.remove('error');
+                }, 500);
+            }
+        }
+
+        // תמיכה ב-Enter
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordInput = document.getElementById('passwordInput');
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+            passwordInput.focus();
+        });
 
         // טעינת נתונים
         async function loadData() {
@@ -749,11 +918,38 @@
             const exam = document.getElementById('filter-exam').value;
             const topic = document.getElementById('filter-topic').value;
             const difficulty = document.getElementById('filter-difficulty').value;
+            const dateFrom = document.getElementById('filter-date-from').value;
+            const dateTo = document.getElementById('filter-date-to').value;
 
             filteredData = allData.filter(d => {
+                // סינון לפי מבחן
                 if (exam !== 'all' && d.exam_name !== exam) return false;
+
+                // סינון לפי נושא
                 if (topic !== 'all' && d.topic !== topic) return false;
+
+                // סינון לפי רמת קושי
                 if (difficulty !== 'all' && d.difficulty !== difficulty) return false;
+
+                // סינון לפי תאריך
+                if (dateFrom || dateTo) {
+                    const timestamp = d.timestamp;
+                    if (!timestamp) return false;
+
+                    // המרת timestamp למחרוזת תאריך (YYYY-MM-DD)
+                    let recordDate;
+                    if (timestamp instanceof Date) {
+                        recordDate = timestamp.toISOString().split('T')[0];
+                    } else {
+                        // אם זה מחרוזת תאריך
+                        recordDate = new Date(timestamp).toISOString().split('T')[0];
+                    }
+
+                    // בדיקה מול טווח התאריכים
+                    if (dateFrom && recordDate < dateFrom) return false;
+                    if (dateTo && recordDate > dateTo) return false;
+                }
+
                 return true;
             });
 
@@ -761,8 +957,20 @@
             updateDashboard();
         }
 
-        // טעינה ראשונית
-        loadData();
+        // איפוס כל הפילטרים
+        function resetFilters() {
+            document.getElementById('filter-exam').value = 'all';
+            document.getElementById('filter-topic').value = 'all';
+            document.getElementById('filter-difficulty').value = 'all';
+            document.getElementById('filter-date-from').value = '';
+            document.getElementById('filter-date-to').value = '';
+
+            filteredData = [...allData];
+            console.log('🔄 הפילטרים אופסו');
+            updateDashboard();
+        }
+
+        // הערה: loadData() נקרא רק אחרי הזנת סיסמה נכונה
     </script>
 </body>
 </html>

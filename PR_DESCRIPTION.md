@@ -73,6 +73,14 @@ A beautiful, real-time analytics dashboard with:
 - Filter by exam type
 - Filter by topic (trauma/rescue)
 - Filter by difficulty level
+- **NEW:** Filter by date range (from - to)
+- Reset all filters button
+
+**🔒 Security:**
+- Password protection (password: רפואה2025)
+- Beautiful password modal with animations
+- Enter key support
+- Error handling with shake animation
 
 **🎨 Design:**
 - Gradient purple background
@@ -80,7 +88,25 @@ A beautiful, real-time analytics dashboard with:
 - Fully responsive
 - Mobile-friendly
 - RTL support
-- No authentication (public access)
+- Password-protected access
+
+### 5️⃣ Floating Statistics Icon
+**NEW! Hidden access for instructors 📊**
+
+**Problem:** Statistics dashboard shouldn't be prominently visible to students.
+
+**Solution:**
+- Removed statistics card from main menu
+- Added floating icon on the left side of the screen
+- Icon follows user during scroll (fixed position)
+
+**Features:**
+- 📊 Emoji icon with animations
+- Float animation (up and down movement)
+- Pulse animation (expanding rings)
+- Hover effect with scale
+- Always accessible but discrete
+- Positioned at 50% screen height
 
 ## 📁 Files Changed
 
@@ -95,7 +121,8 @@ A beautiful, real-time analytics dashboard with:
 - `exam-metav-1.html` - Simplified + statistics
 - `exam-metav-2.html` - Simplified + statistics + sheet change
 - `EXAMS_SETUP.md` - Updated with new simple system
-- `index.html` - Added statistics card
+- `index.html` - Added floating statistics icon (removed card)
+- `instructor-dashboard.html` - Added password protection + date filter
 
 ## 🔧 Technical Details
 
@@ -162,6 +189,8 @@ Real-time charts & insights
 3. **a1b28b0** - Add anonymous statistics collection to all exams
 4. **9eeb081** - Add stunning instructor statistics dashboard
 5. **a8a88cb** - Separate statistics to independent Apps Script
+6. **78eb8df** - Update all files with statistics Apps Script URL
+7. **5fc9ea4** - שיפור עמוד הסטטיסטיקות: אייקון צף, הגנת סיסמה ופילטר תאריך
 
 ## ✅ Testing Checklist
 
@@ -169,7 +198,12 @@ Real-time charts & insights
 - [x] Questions and answers shuffle properly
 - [x] Statistics sent to correct sheet
 - [x] Dashboard loads and displays charts
-- [x] Filters work correctly
+- [x] Filters work correctly (exam, topic, difficulty)
+- [x] Date range filter works correctly
+- [x] Reset filters button works
+- [x] Password protection works (רפואה2025)
+- [x] Floating statistics icon visible on home page
+- [x] Floating icon animations work (float, pulse)
 - [x] Mobile responsive
 - [x] No personal data in statistics
 - [x] All commits pushed
@@ -185,16 +219,23 @@ Real-time charts & insights
    - Which questions are too hard?
    - Which topics need more practice?
    - Real-time performance tracking
+   - Filter by date range to track progress over time
 
 3. **Privacy Compliant**
    - Statistics are anonymous
    - No personal data exposure
-   - Safe to share publicly
+   - Password-protected access
+   - Safe to share with authorized personnel
 
 4. **Professional Presentation**
    - Beautiful visualizations
    - Easy to understand
    - Impressive for stakeholders
+
+5. **Discrete Access**
+   - Statistics hidden from students
+   - Floating icon for instructors only
+   - Password protection prevents unauthorized access
 
 ## 📝 Documentation
 
@@ -204,26 +245,35 @@ All setup instructions included in:
 
 ## 🚀 Next Steps After Merging
 
-1. **Create separate statistics file:**
-   - New Google Sheet: "סטטיסטיקות מבחנים"
-   - Add `exam_statistics` sheet with columns
-   - Deploy Apps Script from STATISTICS_SETUP.md
-   - Copy the URL
+**Good news! Most setup is already complete! ✅**
 
-2. **Update URLs in code:**
-   - Update `STATISTICS_URL` in all 4 exam files
-   - Update `STATISTICS_URL` in instructor-dashboard.html
+1. **Statistics file (DONE):**
+   - ✅ Statistics Google Sheet created
+   - ✅ Apps Script deployed
+   - ✅ All URLs updated in code
 
-3. **Questions file (existing):**
-   - Add 25 questions to each exam sheet
-   - Ensure Apps Script is deployed
+2. **Questions file:**
+   - ✅ Apps Script is deployed
+   - ⚠️ Make sure to add 25 questions to each exam sheet:
+     - `exam_hovesh_1` - Opening exam for Hovesh
+     - `exam_hovesh_2` - Final exam for Hovesh
+     - `exam_metav_1` - Opening exam for Metav
+     - `exam_metav_2` - Final exam for Metav
 
-4. **Test:**
+3. **Test the system:**
    - Complete one exam end-to-end
-   - Check statistics appear in sheet
-   - View the dashboard!
+   - Check statistics appear in the statistics sheet
+   - Test password protection (password: רפואה2025)
+   - View the dashboard and test all filters!
+   - Try the date range filter
+   - Click the floating statistics icon from home page
 
-See `STATISTICS_SETUP.md` for detailed instructions!
+4. **Deploy to production:**
+   - Upload all files to your web server
+   - Test on mobile devices
+   - Share with instructors!
+
+See `STATISTICS_SETUP.md` for detailed setup instructions!
 
 ---
 

@@ -112,6 +112,46 @@
             min-width: 0;
         }
 
+        /* אייקון צף לסטטיסטיקות */
+        .floating-stats-icon {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            animation: float 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
+        }
+
+        .floating-stats-icon:hover {
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+        }
+
+        .floating-stats-icon:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            50% {
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 15px rgba(102, 126, 234, 0);
+            }
+        }
+
         @media (max-width: 360px) {
             .hero h1 {
                 font-size: 2.1rem;
@@ -160,15 +200,11 @@
                 </div>
                 <span class="chevron-icon">◀</span>
             </div>
+        </div>
 
-            <div class="card" data-page="statistics">
-                <div class="card-icon">📊</div>
-                <div class="card-info">
-                    <div class="card-title">סטטיסטיקות</div>
-                    <div class="card-subtitle">דאשבורד למדריך</div>
-                </div>
-                <span class="chevron-icon">◀</span>
-            </div>
+        <!-- אייקון צף לסטטיסטיקות -->
+        <div class="floating-stats-icon" onclick="window.location.href='instructor-dashboard.html'">
+            📊
         </div>
     </div>
 
