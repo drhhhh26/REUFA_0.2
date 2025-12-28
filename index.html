@@ -112,44 +112,32 @@
             min-width: 0;
         }
 
-        /* אייקון צף לסטטיסטיקות */
-        .floating-stats-icon {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.95);
+        /* אייקון סטטיסטיקות למטה */
+        .stats-icon-bottom {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2em;
+            font-size: 1.5em;
             cursor: pointer;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1000;
-            animation: float 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin: 30px auto 20px;
+            opacity: 0.4;
         }
 
-        .floating-stats-icon:hover {
-            transform: translateY(-50%) scale(1.15);
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+        .stats-icon-bottom:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+            opacity: 1;
         }
 
-        .floating-stats-icon:active {
-            transform: translateY(-50%) scale(0.95);
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(102, 126, 234, 0.7);
-            }
-            50% {
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 15px rgba(102, 126, 234, 0);
-            }
+        .stats-icon-bottom:active {
+            transform: scale(0.95);
         }
 
         @media (max-width: 360px) {
@@ -202,8 +190,8 @@
             </div>
         </div>
 
-        <!-- אייקון צף לסטטיסטיקות -->
-        <div class="floating-stats-icon" onclick="window.location.href='instructor-dashboard.html'">
+        <!-- אייקון סטטיסטיקות למטה -->
+        <div class="stats-icon-bottom" onclick="window.location.href='instructor-dashboard.html'" title="סטטיסטיקות">
             📊
         </div>
     </div>
