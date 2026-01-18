@@ -522,6 +522,140 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* פאנל בקרת מבחנים */
+        .exam-control-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .exam-control-panel h3 {
+            font-size: 1.5em;
+            color: #2d3748;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exam-control-panel > p {
+            color: #718096;
+            font-size: 0.95em;
+            margin-bottom: 20px;
+        }
+
+        .exam-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .exam-item {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .exam-item:hover {
+            border-color: #ff9a56;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 154, 86, 0.15);
+        }
+
+        .exam-item-info {
+            flex: 1;
+        }
+
+        .exam-item-name {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1.05em;
+            margin-bottom: 5px;
+        }
+
+        .exam-item-status {
+            font-size: 0.85em;
+            color: #718096;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e0;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            right: 4px;
+            bottom: 4px;
+            background-color: white;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(-30px);
+        }
+
+        input:disabled + .toggle-slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* מסך טעינה לפאנל */
+        .exam-control-loading {
+            text-align: center;
+            padding: 30px;
+            color: #718096;
+        }
+
+        .exam-control-loading .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid #ff9a56;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+
         @media (max-width: 768px) {
             .charts-grid {
                 grid-template-columns: 1fr;
@@ -535,6 +669,14 @@
                 bottom: 20px;
                 left: 20px;
                 padding: 12px 20px;
+            }
+
+            .exam-control-panel {
+                padding: 20px;
+            }
+
+            .exam-items {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -564,6 +706,21 @@
         </div>
 
         <div id="dashboard" style="display: none;">
+            <!-- פאנל בקרת מבחנים -->
+            <div class="exam-control-panel">
+                <h3>🎮 בקרת מבחנים</h3>
+                <p>הפעל או השבת מבחנים לנבחנים בזמן אמת</p>
+
+                <div id="exam-control-loading" class="exam-control-loading">
+                    <div class="spinner"></div>
+                    <div>טוען סטטוס מבחנים...</div>
+                </div>
+
+                <div id="exam-items" class="exam-items" style="display: none;">
+                    <!-- יווצר דינמית -->
+                </div>
+            </div>
+
             <!-- סטטיסטיקות כלליות -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -642,6 +799,8 @@
     <script>
         // 🔗 Apps Script URL לסטטיסטיקות (קובץ נפרד)
         const STATISTICS_URL = 'https://script.google.com/macros/s/AKfycbwId2JjtTY3swtq80B8MUsJ_CrPQPzWKHL5l1zj8cAX2185dc9r4o-aClPRKOeGXuVUSQ/exec';
+        // 🔗 Apps Script URL למאגר שאלות (עם Switch)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyBNcJzP2AIhXbVwYj-oDLmw_w0EPfPIqEuaX_rIsNj1ElMBgd30Fw2EHQ7hHubIIEw8g/exec';
         const CORRECT_PASSWORDS = ['רפואה2025', 'refua2025'];
 
         let allData = [];
@@ -659,6 +818,7 @@
                 isAuthenticated = true;
                 document.getElementById('passwordModal').style.display = 'none';
                 loadData();
+                loadExamStatuses(); // טען גם את סטטוס המבחנים
             } else {
                 input.classList.add('error');
                 errorMsg.classList.add('show');
@@ -992,6 +1152,116 @@
         }
 
         // הערה: loadData() נקרא רק אחרי הזנת סיסמה נכונה
+
+        // ==================== בקרת מבחנים ====================
+
+        const EXAM_NAMES = [
+            'מבחן פתיחה חובש',
+            'מבחן סיום חובש',
+            'מבחן פתיחה מט״ב',
+            'מבחן סיום מט״ב'
+        ];
+
+        // טעינת סטטוס מבחנים
+        async function loadExamStatuses() {
+            try {
+                console.log('📡 טוען סטטוס מבחנים...');
+                const response = await fetch(SCRIPT_URL + '?sheet=switch');
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'שגיאה בטעינת סטטוס מבחנים');
+                }
+
+                const switches = data.switches;
+                renderExamControls(switches);
+            } catch (error) {
+                console.error('❌ שגיאה בטעינת סטטוס מבחנים:', error);
+                document.getElementById('exam-control-loading').innerHTML = `
+                    <div style="color: #fc8181;">
+                        ⚠️ שגיאה בטעינת סטטוס מבחנים<br>
+                        <small>${error.message}</small>
+                    </div>
+                `;
+            }
+        }
+
+        // יצירת HTML לבקרת מבחנים
+        function renderExamControls(switches) {
+            const container = document.getElementById('exam-items');
+            container.innerHTML = '';
+
+            EXAM_NAMES.forEach(examName => {
+                const status = switches[examName] || 'ON';
+                const isOn = status === 'ON';
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'exam-item';
+                itemDiv.innerHTML = `
+                    <div class="exam-item-info">
+                        <div class="exam-item-name">${examName}</div>
+                        <div class="exam-item-status">${isOn ? '🟢 פעיל - נבחנים יכולים לגשת' : '🔴 חסום - נבחנים לא יכולים לגשת'}</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox"
+                               ${isOn ? 'checked' : ''}
+                               onchange="toggleExamStatus('${examName}', this.checked)"
+                               data-exam="${examName}">
+                        <span class="toggle-slider"></span>
+                    </label>
+                `;
+                container.appendChild(itemDiv);
+            });
+
+            // הסתר טעינה, הצג פאנל
+            document.getElementById('exam-control-loading').style.display = 'none';
+            container.style.display = 'grid';
+        }
+
+        // עדכון סטטוס מבחן
+        async function toggleExamStatus(examName, isOn) {
+            const newStatus = isOn ? 'ON' : 'OFF';
+            console.log(`🔄 מעדכן ${examName} ל-${newStatus}`);
+
+            // השבת את כל הטוגלים בזמן עדכון
+            const toggles = document.querySelectorAll('.toggle-switch input');
+            toggles.forEach(t => t.disabled = true);
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `action=updateSwitch&examName=${encodeURIComponent(examName)}&status=${newStatus}`
+                });
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error || 'שגיאה בעדכון');
+                }
+
+                console.log('✅ סטטוס עודכן בהצלחה');
+
+                // עדכן את ה-UI
+                const statusDiv = document.querySelector(`input[data-exam="${examName}"]`)
+                    .closest('.exam-item')
+                    .querySelector('.exam-item-status');
+                statusDiv.textContent = isOn ? '🟢 פעיל - נבחנים יכולים לגשת' : '🔴 חסום - נבחנים לא יכולים לגשת';
+
+            } catch (error) {
+                console.error('❌ שגיאה בעדכון סטטוס:', error);
+                alert(`⚠️ שגיאה בעדכון סטטוס המבחן:\n${error.message}\n\nנסה שנית או רענן את הדף.`);
+
+                // החזר את הטוגל למצב הקודם
+                const toggle = document.querySelector(`input[data-exam="${examName}"]`);
+                toggle.checked = !isOn;
+            } finally {
+                // אפשר שוב את כל הטוגלים
+                toggles.forEach(t => t.disabled = false);
+            }
+        }
     </script>
 </body>
 </html>
