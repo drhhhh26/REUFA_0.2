@@ -690,10 +690,21 @@
 
             // שליחה ל-Google Sheets - תוצאות אישיות
             const data = {
+                timestamp: new Date().toLocaleString('he-IL', {
+                    timeZone: 'Asia/Jerusalem',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
                 name: document.getElementById('student-name').value,
                 id: document.getElementById('student-id').value,
                 unit: document.getElementById('student-unit').value,
                 exam: EXAM_CONFIG.name,
+                traumaScore: traumaScore,
+                rescueScore: rescueScore,
+                totalScore: totalScore,
                 score: (traumaCorrect + rescueCorrect),
                 total: 25
             };
