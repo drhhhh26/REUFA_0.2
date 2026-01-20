@@ -709,6 +709,9 @@
                 total: 25
             };
 
+            console.log('📤 נתונים שנשלחים ל-RESULTS_URL:', JSON.stringify(data, null, 2));
+            console.log('🔗 RESULTS_URL:', RESULTS_URL);
+
             // הכנת נתוני סטטיסטיקות אנונימיים
             const statistics = examQuestions.map((q, index) => ({
                 exam_name: EXAM_CONFIG.name,
