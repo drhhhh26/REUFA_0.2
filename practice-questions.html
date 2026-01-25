@@ -480,6 +480,7 @@
                 questions = shuffleArray(questions);
 
                 console.log(`✅ ${questions.length} שאלות נטענו`);
+                console.log('📋 דוגמה לשאלה:', questions[0]);
 
                 if (questions.length === 0) {
                     throw new Error('לא נמצאו שאלות במערכת');
@@ -563,6 +564,9 @@
             const question = questions[currentQuestionIndex];
             const correct = parseInt(question.correct);
             const isCorrect = selectedNum === correct;
+
+            console.log('🔍 שאלה נוכחית:', question);
+            console.log('💡 TIP:', question.TIP);
 
             // Update buttons
             const buttons = document.querySelectorAll('.answer-btn');
