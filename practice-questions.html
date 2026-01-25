@@ -593,12 +593,16 @@
                 correctCount++;
                 feedbackIcon.textContent = '✅';
                 feedbackTitle.textContent = 'נכון מאוד!';
-                feedbackTip.textContent = question.TIP || 'תשובה מצוינת!';
+                // Check if TIP exists and is not empty
+                const tip = question.TIP && question.TIP.toString().trim() !== '' ? question.TIP : 'תשובה מצוינת! המשך כך!';
+                feedbackTip.textContent = tip;
                 playSound(correctSound);
             } else {
                 feedbackIcon.textContent = '❌';
                 feedbackTitle.textContent = 'לא נכון';
-                feedbackTip.textContent = question.TIP || 'נסה שוב בפעם הבאה.';
+                // Check if TIP exists and is not empty
+                const tip = question.TIP && question.TIP.toString().trim() !== '' ? question.TIP : 'לא נורא! למד מהטעות והמשך קדימה.';
+                feedbackTip.textContent = tip;
                 playSound(wrongSound);
             }
 
