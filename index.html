@@ -148,55 +148,59 @@
             transform: scale(0.95);
         }
 
-        /* טאב צף למאגר תרגול */
-        .practice-tab {
-            position: fixed;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%) translateX(-85px);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 20px 15px 25px;
-            border-radius: 0 50px 50px 0;
-            cursor: pointer;
-            box-shadow: 0 6px 24px rgba(102, 126, 234, 0.4);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1000;
-            display: flex;
+        /* כפתור גישה מהירה לתרגול */
+        .quick-practice-btn {
+            margin-top: 20px;
+            display: inline-flex;
             align-items: center;
             gap: 10px;
-            font-weight: 700;
-            font-size: 1.1em;
-            animation: slideInFromLeft 1s ease 1.5s forwards;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 1s ease 1.2s backwards;
         }
 
-        .practice-tab:hover {
-            transform: translateY(-50%) translateX(0);
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.6);
+        .quick-practice-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
         }
 
-        .practice-tab:active {
-            transform: translateY(-50%) translateX(0) scale(0.95);
+        .quick-practice-btn:active {
+            transform: translateY(-1px) scale(1.02);
         }
 
-        .practice-tab-icon {
-            font-size: 1.8em;
+        .quick-practice-icon {
+            font-size: 1.4em;
             animation: pulse 2s ease-in-out infinite;
         }
 
-        .practice-tab-text {
-            white-space: nowrap;
-            letter-spacing: 0.5px;
+        .quick-practice-text {
+            letter-spacing: 0.3px;
         }
 
-        @keyframes slideInFromLeft {
+        .quick-practice-arrow {
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .quick-practice-btn:hover .quick-practice-arrow {
+            transform: translateX(-3px);
+        }
+
+        @keyframes fadeInUp {
             from {
-                transform: translateY(-50%) translateX(-150px);
                 opacity: 0;
+                transform: translateY(20px);
             }
             to {
-                transform: translateY(-50%) translateX(-85px);
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -206,34 +210,6 @@
             }
             50% {
                 transform: scale(1.15);
-            }
-        }
-
-        /* מובייל - טאב תרגול */
-        @media (max-width: 768px) {
-            .practice-tab {
-                padding: 12px 15px 12px 20px;
-                font-size: 0.95em;
-                transform: translateY(-50%) translateX(-75px);
-            }
-
-            .practice-tab:hover {
-                transform: translateY(-50%) translateX(0);
-            }
-
-            .practice-tab-icon {
-                font-size: 1.5em;
-            }
-
-            @keyframes slideInFromLeft {
-                from {
-                    transform: translateY(-50%) translateX(-150px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateY(-50%) translateX(-75px);
-                    opacity: 1;
-                }
             }
         }
 
@@ -270,6 +246,13 @@
             </div>
             <h1>מדור רפואה</h1>
             <p class="hero-subtitle">בא״פ העורף</p>
+
+            <!-- כפתור גישה מהירה לתרגול -->
+            <div class="quick-practice-btn" onclick="window.location.href='practice-questions.html'">
+                <span class="quick-practice-icon">🎯</span>
+                <span class="quick-practice-text">תרגול מהיר</span>
+                <span class="quick-practice-arrow">←</span>
+            </div>
         </div>
 
         <div class="cards-container">
@@ -313,12 +296,6 @@
         <!-- אייקון סטטיסטיקות למטה -->
         <div class="stats-icon-bottom" onclick="window.location.href='instructor-dashboard.html'" title="סטטיסטיקות">
             📊
-        </div>
-
-        <!-- טאב צף למאגר תרגול -->
-        <div class="practice-tab" onclick="window.location.href='practice-questions.html'" title="מאגר תרגול">
-            <div class="practice-tab-icon">🎯</div>
-            <div class="practice-tab-text">תרגול</div>
         </div>
     </div>
 
