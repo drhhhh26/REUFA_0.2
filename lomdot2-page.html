@@ -255,7 +255,10 @@
                 return urlObj.protocol === 'https:' &&
                        (urlObj.hostname === 'drive.google.com' ||
                         urlObj.hostname === 'script.google.com' ||
-                        urlObj.hostname === 'script.googleusercontent.com');
+                        urlObj.hostname === 'script.googleusercontent.com' ||
+                        urlObj.hostname === 'www.youtube.com' ||
+                        urlObj.hostname === 'youtube.com' ||
+                        urlObj.hostname === 'youtu.be');
             } catch (e) {
                 return false;
             }
