@@ -494,13 +494,16 @@
                     q.question &&
                     q.question.toString().trim() !== '' &&
                     q.topic &&
-                    q.difficulty
+                    q.difficulty &&
+                    q.correct &&
+                    parseInt(q.correct) >= 1 &&
+                    parseInt(q.correct) <= 4
                 );
 
                 console.log('✅ נטענו ' + examQuestions.length + ' שאלות מהגיליון');
 
                 if (examQuestions.length !== 25) {
-                    throw new Error(`נדרשות בדיוק 25 שאלות בגיליון, נמצאו ${examQuestions.length}`);
+                    throw new Error(`נדרשות בדיוק 25 שאלות תקינות בגיליון, נמצאו ${examQuestions.length}`);
                 }
 
                 // ערבוב תשובות ושאלות
@@ -793,7 +796,13 @@
                     }
 
                     const userAnswer = answers[index];
-                    const correctAnswer = q.correct;
+                    const correctAnswer = parseInt(q.correct);
+
+                    // וולידציה של correctAnswer
+                    if (!correctAnswer || correctAnswer < 1 || correctAnswer > 4) {
+                        console.error(`❌ שאלה ${index + 1}: תשובה נכונה לא תקינה (${q.correct})`);
+                        return;
+                    }
 
                     // סימון התשובה של המשתמש
                     if (userAnswer) {
